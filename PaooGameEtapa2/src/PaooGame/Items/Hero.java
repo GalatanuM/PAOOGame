@@ -129,7 +129,7 @@ public class Hero extends Character
             ///Actualizeaza imaginea
 
         ///Stanga
-        if(refLink.GetKeyManager().left && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down)
+        if(refLink.GetKeyManager().left && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down && !refLink.GetKeyManager().right)
         {
             if(image == Assets.heroLeft)
             {
@@ -175,7 +175,7 @@ public class Hero extends Character
         }
         else
         ///Dreapta
-        if(refLink.GetKeyManager().right && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down)
+        if(refLink.GetKeyManager().right && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down && !refLink.GetKeyManager().left)
         {
             if(image == Assets.heroRight)
             {
@@ -221,7 +221,7 @@ public class Hero extends Character
         }
         else
         ///Sus
-        if(refLink.GetKeyManager().up && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left)
+        if(refLink.GetKeyManager().up && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left && !refLink.GetKeyManager().down)
         {
             if(image == Assets.heroUp)
             {
@@ -267,7 +267,7 @@ public class Hero extends Character
         }
         else
         ///Jos
-        if(refLink.GetKeyManager().down && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left)
+        if(refLink.GetKeyManager().down && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left && !refLink.GetKeyManager().up)
         {
             if(image == Assets.heroDown)
             {
@@ -313,7 +313,7 @@ public class Hero extends Character
         }
         else
         ///Stanga-Sus / Dreapta-Sus
-        if(refLink.GetKeyManager().up && (refLink.GetKeyManager().right || refLink.GetKeyManager().left))
+        if( ((refLink.GetKeyManager().up && refLink.GetKeyManager().right) ^ (refLink.GetKeyManager().up && refLink.GetKeyManager().left)) && !refLink.GetKeyManager().down)
         {
             if(image == Assets.heroUp)
             {
@@ -359,7 +359,7 @@ public class Hero extends Character
         }
         else
         ///Stanga-Jos / Dreapta-Jos
-        if(refLink.GetKeyManager().down && (refLink.GetKeyManager().right || refLink.GetKeyManager().left))
+        if( ((refLink.GetKeyManager().down && refLink.GetKeyManager().right) ^ (refLink.GetKeyManager().down && refLink.GetKeyManager().left)) && !refLink.GetKeyManager().up )
         {
             if(image == Assets.heroDown)
             {
@@ -418,53 +418,54 @@ public class Hero extends Character
             ///Implicit eroul nu trebuie sa se deplaseze daca nu este apasata o tasta
         xMove = 0;
         yMove = 0;
+
             ///Verificare apasare tasta "sus"
-        if(refLink.GetKeyManager().up && !refLink.GetKeyManager().left && !refLink.GetKeyManager().right)
+        if(refLink.GetKeyManager().up && !refLink.GetKeyManager().left && !refLink.GetKeyManager().right && !refLink.GetKeyManager().down)
         {
             yMove = -speed;
         }
 
             ///Verificare apasare tasta "jos"
-        if(refLink.GetKeyManager().down && !refLink.GetKeyManager().left && !refLink.GetKeyManager().right)
+        if(refLink.GetKeyManager().down && !refLink.GetKeyManager().left && !refLink.GetKeyManager().right && !refLink.GetKeyManager().up)
         {
             yMove = speed;
         }
 
             ///Verificare apasare tasta "stanga"
-        if(refLink.GetKeyManager().left && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down)
+        if(refLink.GetKeyManager().left && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down && !refLink.GetKeyManager().right)
         {
             xMove = -speed;
         }
 
             ///Verificare apasare tasta "dreapta"
-        if(refLink.GetKeyManager().right && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down)
+        if(refLink.GetKeyManager().right && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down && !refLink.GetKeyManager().left)
         {
             xMove = speed;
         }
 
             ///Verificare apasare taste "stanga-sus"
-        if(refLink.GetKeyManager().left && refLink.GetKeyManager().up)
+        if(refLink.GetKeyManager().left && refLink.GetKeyManager().up && !refLink.GetKeyManager().down && !refLink.GetKeyManager().right)
         {
             xMove = -(float)sqrt(2*speed*speed)/2;
             yMove = -(float)sqrt(2*speed*speed)/2;
         }
 
             ///Verificare apasare taste "stanga-jos"
-        if(refLink.GetKeyManager().left && refLink.GetKeyManager().down)
+        if(refLink.GetKeyManager().left && refLink.GetKeyManager().down && !refLink.GetKeyManager().up && !refLink.GetKeyManager().right)
         {
             xMove = -(float)sqrt(2*speed*speed)/2;
             yMove = (float)sqrt(2*speed*speed)/2;
         }
 
             ///Verificare apasare taste "dreapta-sus"
-        if(refLink.GetKeyManager().right && refLink.GetKeyManager().up)
+        if(refLink.GetKeyManager().right && refLink.GetKeyManager().up && !refLink.GetKeyManager().left && !refLink.GetKeyManager().down)
         {
             xMove = (float)sqrt(2*speed*speed)/2;
             yMove = -(float)sqrt(2*speed*speed)/2;
         }
 
             ///Verificare apasare taste "dreapta-jos"
-        if(refLink.GetKeyManager().right && refLink.GetKeyManager().down)
+        if(refLink.GetKeyManager().right && refLink.GetKeyManager().down && !refLink.GetKeyManager().up && !refLink.GetKeyManager().left)
         {
             xMove = (float)sqrt(2*speed*speed)/2;
             yMove = (float)sqrt(2*speed*speed)/2;
