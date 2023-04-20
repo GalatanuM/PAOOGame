@@ -62,7 +62,8 @@ public class Hero extends Character
         Move();
             ///Actualizeaza imaginea
 
-        if(refLink.GetKeyManager().left)
+        ///Stanga
+        if(refLink.GetKeyManager().left && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down)
         {
             if(image == Assets.heroLeft)
             {
@@ -106,7 +107,9 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-        if(refLink.GetKeyManager().right)
+
+        ///Dreapta
+        if(refLink.GetKeyManager().right && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down)
         {
             if(image == Assets.heroRight)
             {
@@ -150,7 +153,9 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-        if(refLink.GetKeyManager().up)
+
+        ///Sus
+        if(refLink.GetKeyManager().up && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left)
         {
             if(image == Assets.heroUp)
             {
@@ -194,7 +199,101 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-        if(refLink.GetKeyManager().down)
+
+        ///Jos
+        if(refLink.GetKeyManager().down && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left)
+        {
+            if(image == Assets.heroDown)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroDown1;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else if (image == Assets.heroDown1)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroDown2;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else if (image == Assets.heroDown2)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroDown3;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else if (image == Assets.heroDown3)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroDown;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else
+            {
+                image = Assets.heroDown;
+                animatie=0;
+            }
+        }
+
+        ///Stanga-Sus / Dreapta-Sus
+        if(refLink.GetKeyManager().up && (refLink.GetKeyManager().right || refLink.GetKeyManager().left))
+        {
+            if(image == Assets.heroUp)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroUp1;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else if (image == Assets.heroUp1)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroUp2;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else if (image == Assets.heroUp2)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroUp3;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else if (image == Assets.heroUp3)
+            {
+                if(animatie==6)
+                {
+                    image = Assets.heroUp;
+                    animatie=0;
+                }
+                animatie++;
+            }
+            else
+            {
+                image = Assets.heroUp;
+                animatie=0;
+            }
+        }
+
+        ///Stanga-Jos / Dreapta-Jos
+        if(refLink.GetKeyManager().down && (refLink.GetKeyManager().right || refLink.GetKeyManager().left))
         {
             if(image == Assets.heroDown)
             {
