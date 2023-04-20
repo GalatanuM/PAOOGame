@@ -62,11 +62,11 @@ public abstract class Character extends Item
         else
             if(xMove < 0 && x<=0)
                 x=0;
-        if(xMove > 0 && x < DEFAULT_CREATURE_WIDTH * 19)
+        if(xMove > 0 && x < refLink.GetGame().GetWidth()-width)
             x += xMove;
         else
-            if(xMove > 0 && x >= DEFAULT_CREATURE_WIDTH * 19)
-                x = DEFAULT_CREATURE_WIDTH * 19;
+            if(xMove > 0 && x >= refLink.GetGame().GetWidth()-width)
+                x = refLink.GetGame().GetWidth()-width;
     }
 
     /*! \fn public void MoveY()
@@ -80,11 +80,11 @@ public abstract class Character extends Item
         else
             if(yMove < 0 && y<=0)
                 y=0;
-        if(yMove > 0 && y < DEFAULT_CREATURE_HEIGHT * 9)
+        if(yMove > 0 && y < refLink.GetGame().GetHeight()-height)
             y += yMove;
         else
-            if(yMove > 0 && y >= DEFAULT_CREATURE_HEIGHT * 9)
-                y = DEFAULT_CREATURE_HEIGHT * 9;
+            if(yMove > 0 && y >= refLink.GetGame().GetHeight()-height)
+                y = refLink.GetGame().GetHeight()-height;
 
     }
 

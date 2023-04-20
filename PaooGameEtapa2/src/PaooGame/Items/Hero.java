@@ -38,16 +38,82 @@ public class Hero extends Character
         image = Assets.heroDown;
         animatie=0;
             ///Stabilieste pozitia relativa si dimensiunea dreptunghiului de coliziune, starea implicita(normala)
-        normalBounds.x = 0;
-        normalBounds.y = 0;
-        normalBounds.width = 48;
-        normalBounds.height = 48;
+        normalBounds.x = 16;
+        normalBounds.y = 16;
+        normalBounds.width = 16;
+        normalBounds.height = 32;
 
             ///Stabilieste pozitia relativa si dimensiunea dreptunghiului de coliziune, starea de atac
         attackBounds.x = 10;
         attackBounds.y = 10;
         attackBounds.width = 38;
         attackBounds.height = 38;
+    }
+
+    /*! \fn public void Move()
+        \brief Modifica pozitia caracterului
+     */
+    @Override
+    public void Move()
+    {
+        ///Modifica pozitia caracterului pe axa X.
+        ///Modifica pozitia caracterului pe axa Y.
+        MoveX();
+        MoveY();
+    }
+
+    /*! \fn public void MoveX()
+        \brief Modifica pozitia caracterului pe axa X.
+     */
+    @Override
+    public void MoveX()
+    {
+        ///Aduna la pozitia curenta numarul de pixeli cu care trebuie sa se deplaseze pe axa X.
+        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x+ xMove )/48                       ,(int)(y+normalBounds.y )/48).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/48    ,(int)(y+normalBounds.y )/48).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x + xMove)/48                       ,(int)(y+normalBounds.y + normalBounds.height)/48).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/48    ,(int)(y+normalBounds.y + normalBounds.height)/48).IsSolid()
+            )
+        {
+            if (xMove < 0 && x > 0 - normalBounds.x)
+                x += xMove;
+            else if (xMove < 0 && x <= 0 - normalBounds.x)
+                x = 0 - normalBounds.x;
+            if (xMove > 0 && x < refLink.GetGame().GetWidth() - normalBounds.width - normalBounds.x)
+                x += xMove;
+            else if (xMove > 0 && x >= refLink.GetGame().GetWidth() - normalBounds.width)
+                x = refLink.GetGame().GetWidth() - normalBounds.width;
+        }
+    }
+
+    /*! \fn public void MoveY()
+        \brief Modifica pozitia caracterului pe axa Y.
+     */
+    @Override
+    public void MoveY()
+    {
+        ///Aduna la pozitia curenta numarul de pixeli cu care trebuie sa se deplaseze pe axa Y.
+
+        //stanga sus
+        //dreapta sus
+        //stanga jos
+        //dreapta jos
+
+        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y+yMove)/48).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y+yMove)/48).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y + normalBounds.height+yMove)/48).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/48).IsSolid()
+        )
+        {
+            if (yMove < 0 && y > 0 - normalBounds.y)
+                y += yMove;
+            else if (yMove < 0 && y <= 0)
+                y = 0 - normalBounds.y;
+            if (yMove > 0 && y < refLink.GetGame().GetHeight() - normalBounds.height - normalBounds.y)
+                y += yMove;
+            else if (yMove > 0 && y >= refLink.GetGame().GetHeight() - normalBounds.height)
+                y = refLink.GetGame().GetHeight() - normalBounds.height;
+        }
     }
 
     /*! \fn public void Update()
@@ -107,7 +173,7 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-
+        else
         ///Dreapta
         if(refLink.GetKeyManager().right && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down)
         {
@@ -153,7 +219,7 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-
+        else
         ///Sus
         if(refLink.GetKeyManager().up && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left)
         {
@@ -199,7 +265,7 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-
+        else
         ///Jos
         if(refLink.GetKeyManager().down && !refLink.GetKeyManager().right && !refLink.GetKeyManager().left)
         {
@@ -245,7 +311,7 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-
+        else
         ///Stanga-Sus / Dreapta-Sus
         if(refLink.GetKeyManager().up && (refLink.GetKeyManager().right || refLink.GetKeyManager().left))
         {
@@ -291,7 +357,7 @@ public class Hero extends Character
                 animatie=0;
             }
         }
-
+        else
         ///Stanga-Jos / Dreapta-Jos
         if(refLink.GetKeyManager().down && (refLink.GetKeyManager().right || refLink.GetKeyManager().left))
         {
@@ -336,6 +402,11 @@ public class Hero extends Character
                 image = Assets.heroDown;
                 animatie=0;
             }
+        }
+        else
+        {
+            image = Assets.heroDown;
+            animatie=0;
         }
     }
 
