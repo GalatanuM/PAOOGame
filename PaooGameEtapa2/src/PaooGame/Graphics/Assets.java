@@ -50,6 +50,7 @@ public class Assets
         townGrass = sheet.crop(2, 0);
         mountain = sheet.crop(3, 0);
         water = sheet.crop(4, 0);
+        tree = sheet.crop(5,0);
         heroLeft = sheet.crop(0, 2);
         heroLeft1 = sheet.crop(0, 3);
         heroLeft2 = sheet.crop(0, 4);

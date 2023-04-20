@@ -43,6 +43,14 @@ public class Map
      */
     public void Draw(Graphics g)
     {
+        ///randare iarba
+        for(int y = 0; y < refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT; y++)
+        {
+            for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
+            {
+                GetTile(0, 0).Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
+            }
+        }
             ///Se parcurge matricea de dale (codurile aferente) si se deseneaza harta respectiva
         for(int y = 0; y < refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT; y++)
         {
