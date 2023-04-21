@@ -3,6 +3,7 @@ package PaooGame.States;
 import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
 import PaooGame.Maps.Map;
+import PaooGame.Tiles.Tile;
 
 import java.awt.*;
 
@@ -28,7 +29,7 @@ public class PlayState extends State
             ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
         refLink.SetMap(map);
             ///Construieste eroul
-        hero = new Hero(refLink,100, 100);
+        hero = new Hero(refLink,10* Tile.TILE_WIDTH, 4*Tile.TILE_HEIGHT);
     }
 
     /*! \fn public void Update()

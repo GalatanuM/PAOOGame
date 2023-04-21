@@ -48,7 +48,7 @@ public class Map
         {
             for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
             {
-                GetTile(0, 0).Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
+                Tile.grassTile.Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
             }
         }
             ///Se parcurge matricea de dale (codurile aferente) si se deseneaza harta respectiva
@@ -81,6 +81,17 @@ public class Map
         return t;
     }
 
+    /*! \fn public void SetTile(int x, int y, Tile a)
+        \brief Seteaza in matricea de dale codul unei dale noi
+
+        In situatia in care dala nu este gasita datorita unei erori ce tine de cod dala, nu se va produce nici o schimbare
+     */
+    public void SetTile(int x, int y, Tile a)
+    {
+        if(a != null)
+            tiles[x][y]=a.GetId();
+    }
+
     /*! \fn private void LoadWorld()
         \brief Functie de incarcare a hartii jocului.
         Aici se poate genera sau incarca din fisier harta. Momentan este incarcata static.
@@ -90,9 +101,9 @@ public class Map
         //atentie latimea si inaltimea trebuiesc corelate cu dimensiunile ferestrei sau
         //se poate implementa notiunea de camera/cadru de vizualizare al hartii
             ///Se stabileste latimea hartii in numar de dale.
-        width = 20;
+        width = refLink.GetGame().GetWidth()/Tile.TILE_WIDTH;
             ///Se stabileste inaltimea hartii in numar de dale
-        height = 10;
+        height = refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT;
             ///Se construieste matricea de coduri de dale
         tiles = new int[width][height];
             //Se incarca matricea cu coduri
@@ -115,16 +126,17 @@ public class Map
     {
             ///Definire statica a matricei de coduri de dale.
         final int map[][] = {
-        {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-        {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                {1, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                {1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 3, 0, 3, 0, 0, 1},
+                {1, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1},
+                {1, 3, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                {1, 0, 0, 3, 0, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 1},
+                {1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 2, 2, 2, 2, 2, 2, 4, 0, 0, 1},
+                {1, 0, 3, 0, 0, 0, 0, 0, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 0, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 1, 1}
+        };
         return map[x][y];
     }
 }

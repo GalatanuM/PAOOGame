@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import PaooGame.RefLinks;
 import PaooGame.Graphics.Assets;
+import PaooGame.Tiles.Tile;
 
 import static java.lang.Math.sqrt;
 
@@ -69,6 +70,12 @@ public class Hero extends Character
     public void MoveX()
     {
         ///Aduna la pozitia curenta numarul de pixeli cu care trebuie sa se deplaseze pe axa X.
+
+        //stanga sus
+        //dreapta sus
+        //stanga jos
+        //dreapta jos
+
         if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x+ xMove )/48                       ,(int)(y+normalBounds.y )/48).IsSolid() &&
                 !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/48    ,(int)(y+normalBounds.y )/48).IsSolid() &&
                 !refLink.GetMap().GetTile((int)(x+normalBounds.x + xMove)/48                       ,(int)(y+normalBounds.y + normalBounds.height)/48).IsSolid() &&
@@ -116,6 +123,24 @@ public class Hero extends Character
         }
     }
 
+    public void UpdateTile()
+    {
+        //stanga sus
+        //dreapta sus
+        //stanga jos
+        //dreapta jos
+
+        if(     refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y+yMove)/48) ==
+                refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/48) &&
+                refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y+yMove)/48) ==
+                        Tile.soilTile
+        )
+        {
+            refLink.GetMap().SetTile((int)(x+normalBounds.x)/48,(int)(y+normalBounds.y+yMove)/48,Tile.grassTile);
+        }
+
+    }
+
     /*! \fn public void Update()
         \brief Actualizeaza pozitia si imaginea eroului.
      */
@@ -126,7 +151,10 @@ public class Hero extends Character
         GetInput();
             ///Actualizeaza pozitia
         Move();
+            ///Actualizeaza harta
+        UpdateTile();
             ///Actualizeaza imaginea
+
 
         ///Stanga
         if(refLink.GetKeyManager().left && !refLink.GetKeyManager().up && !refLink.GetKeyManager().down && !refLink.GetKeyManager().right)
@@ -483,7 +511,7 @@ public class Hero extends Character
         g.drawImage(image, (int)x, (int)y, width, height, null);
 
             ///doar pentru debug daca se doreste vizualizarea dreptunghiului de coliziune altfel se vor comenta urmatoarele doua linii
-        ///g.setColor(Color.blue);
-        ///g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
+        g.setColor(Color.blue);
+        g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
     }
 }
