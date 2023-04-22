@@ -21,17 +21,17 @@ import static java.lang.Math.sqrt;
 public class Hero extends Character
 {
     private BufferedImage image;    /*!< Referinta catre imaginea curenta a eroului.*/
-
+    private static Hero hero = null;
     private int animatie;
 
-    /*! \fn public Hero(RefLinks refLink, float x, float y)
+    /*! \fn private Hero(RefLinks refLink, float x, float y)
         \brief Constructorul de initializare al clasei Hero.
 
         \param refLink Referinta catre obiectul shortcut (obiect ce retine o serie de referinte din program).
         \param x Pozitia initiala pe axa X a eroului.
         \param y Pozitia initiala pe axa Y a eroului.
      */
-    public Hero(RefLinks refLink, float x, float y)
+    private Hero(RefLinks refLink, float x, float y)
     {
             ///Apel al constructorului clasei de baza
         super(refLink, x,y, Character.DEFAULT_CREATURE_WIDTH, Character.DEFAULT_CREATURE_HEIGHT);
@@ -49,6 +49,15 @@ public class Hero extends Character
         attackBounds.y = 10;
         attackBounds.width = 38;
         attackBounds.height = 38;
+    }
+
+    public static synchronized Hero getInstance(RefLinks refLink, float x, float y)
+    {
+        if(hero == null)
+        {
+            hero = new Hero(refLink,x,y);
+        }
+        return hero;
     }
 
     /*! \fn public void Move()
