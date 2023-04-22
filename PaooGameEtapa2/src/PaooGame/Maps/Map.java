@@ -4,6 +4,9 @@ import PaooGame.RefLinks;
 import PaooGame.Tiles.Tile;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /*! \class public class Map
     \brief Implementeaza notiunea de harta a jocului.
@@ -82,7 +85,7 @@ public class Map
     }
 
     /*! \fn public void SetTile(int x, int y, Tile a)
-        \brief Seteaza in matricea de dale codul unei dale noi
+        \brief Seteaza in matricea de dale codul unei alte dale
 
         In situatia in care dala nu este gasita datorita unei erori ce tine de cod dala, nu se va produce nici o schimbare
      */
@@ -94,49 +97,29 @@ public class Map
 
     /*! \fn private void LoadWorld()
         \brief Functie de incarcare a hartii jocului.
-        Aici se poate genera sau incarca din fisier harta. Momentan este incarcata static.
+        Aici se poate genera sau incarca din fisier harta
      */
     private void LoadWorld()
     {
-        //atentie latimea si inaltimea trebuiesc corelate cu dimensiunile ferestrei sau
-        //se poate implementa notiunea de camera/cadru de vizualizare al hartii
-            ///Se stabileste latimea hartii in numar de dale.
-        width = refLink.GetGame().GetWidth()/Tile.TILE_WIDTH;
-            ///Se stabileste inaltimea hartii in numar de dale
-        height = refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT;
-            ///Se construieste matricea de coduri de dale
-        tiles = new int[width][height];
-            //Se incarca matricea cu coduri
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++)
+        try {
+            File inputFile = new File("res/maps/Map.txt");
+            Scanner scanner = new Scanner(inputFile);
+            while (scanner.hasNextInt())
             {
-                tiles[x][y] = MiddleEastMap(y, x);
+                height = scanner.nextInt();
+                width = scanner.nextInt();
+                tiles = new int[width][height];
+                for(int y = 0; y < height; y++)
+                {
+                    for(int x = 0; x < width; x++)
+                    {
+                        tiles[x][y] = scanner.nextInt();
+                    }
+                }
             }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
         }
-    }
-
-    /*! \fn private int MiddleEastMap(int x ,int y)
-        \brief O harta incarcata static.
-
-        \param x linia pe care se afla codul dalei de interes.
-        \param y coloana pe care se afla codul dalei de interes.
-     */
-    private int MiddleEastMap(int x ,int y)
-    {
-            ///Definire statica a matricei de coduri de dale.
-        final int map[][] = {
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                {1, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                {1, 3, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 3, 0, 3, 0, 0, 0},
-                {1, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0},
-                {1, 3, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                {1, 0, 0, 3, 0, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 1},
-                {1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 2, 2, 2, 2, 2, 2, 4, 0, 0, 1},
-                {1, 0, 3, 0, 0, 0, 0, 0, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 0, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 1, 1}
-        };
-        return map[x][y];
     }
 }
