@@ -67,8 +67,8 @@ public class Hero extends Character
     public void Move()
     {
         ///Modifica pozitia caracterului pe axa X.
-        ///Modifica pozitia caracterului pe axa Y.
         MoveX();
+        ///Modifica pozitia caracterului pe axa Y.
         MoveY();
     }
 
@@ -91,14 +91,10 @@ public class Hero extends Character
                 !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/48    ,(int)(y+normalBounds.y + normalBounds.height)/48).IsSolid()
             )
         {
-            if (xMove < 0 && x > 0 - normalBounds.x)
+            if (xMove < 0 && x+xMove > -normalBounds.x) //la stanga
                 x += xMove;
-            else if (xMove < 0 && x <= 0 - normalBounds.x)
-                x = 0 - normalBounds.x;
-            if (xMove > 0 && x < refLink.GetGame().GetWidth() - normalBounds.width - normalBounds.x)
+            if (xMove > 0 && x+xMove < refLink.GetGame().GetWidth() - normalBounds.width - normalBounds.x) //la dreapta
                 x += xMove;
-            else if (xMove > 0 && x >= refLink.GetGame().GetWidth() - normalBounds.width)
-                x = refLink.GetGame().GetWidth() - normalBounds.width;
         }
     }
 
@@ -121,14 +117,10 @@ public class Hero extends Character
                 !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/48).IsSolid()
         )
         {
-            if (yMove < 0 && y > 0 - normalBounds.y)
+            if (yMove < 0 && y+yMove > -normalBounds.y)
                 y += yMove;
-            else if (yMove < 0 && y <= 0)
-                y = 0 - normalBounds.y;
-            if (yMove > 0 && y < refLink.GetGame().GetHeight() - normalBounds.height - normalBounds.y)
+            if (yMove > 0 && y+yMove < refLink.GetGame().GetHeight() - normalBounds.height - normalBounds.y)
                 y += yMove;
-            else if (yMove > 0 && y >= refLink.GetGame().GetHeight() - normalBounds.height)
-                y = refLink.GetGame().GetHeight() - normalBounds.height;
         }
     }
 
@@ -139,13 +131,13 @@ public class Hero extends Character
         //stanga jos
         //dreapta jos
 
-        if(     refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y+yMove)/48) ==
-                refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/48) &&
-                refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y+yMove)/48) ==
+        if(     refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y)/48) ==
+                refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y + normalBounds.height)/48) &&
+                refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y)/48) ==
                         Tile.soilTile
         )
         {
-            refLink.GetMap().SetTile((int)(x+normalBounds.x)/48,(int)(y+normalBounds.y+yMove)/48,Tile.grassTile);
+            refLink.GetMap().SetTile((int)(x+normalBounds.x)/48,(int)(y+normalBounds.y)/48,Tile.grassTile);
         }
 
     }
