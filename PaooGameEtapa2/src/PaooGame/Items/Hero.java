@@ -15,7 +15,6 @@ import static java.lang.Math.sqrt;
     Elementele suplimentare pe care le aduce fata de clasa de baza sunt:
         imaginea (acest atribut poate fi ridicat si in clasa de baza)
         deplasarea
-        atacul (nu este implementat momentan)
         dreptunghiul de coliziune
  */
 public class Hero extends Character
@@ -85,10 +84,10 @@ public class Hero extends Character
         //stanga jos
         //dreapta jos
 
-        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x+ xMove )/48                       ,(int)(y+normalBounds.y )/48).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/48    ,(int)(y+normalBounds.y )/48).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x + xMove)/48                       ,(int)(y+normalBounds.y + normalBounds.height)/48).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/48    ,(int)(y+normalBounds.y + normalBounds.height)/48).IsSolid()
+        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x+ xMove )/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y )/Tile.TILE_HEIGHT).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y )/Tile.TILE_HEIGHT).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x + xMove)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT).IsSolid()
             )
         {
             if (xMove < 0 && x+xMove > -normalBounds.x) //la stanga
@@ -111,10 +110,10 @@ public class Hero extends Character
         //stanga jos
         //dreapta jos
 
-        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y+yMove)/48).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y+yMove)/48).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y + normalBounds.height+yMove)/48).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/48).IsSolid()
+        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y + normalBounds.height+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
+                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/Tile.TILE_HEIGHT).IsSolid()
         )
         {
             if (yMove < 0 && y+yMove > -normalBounds.y)
@@ -126,14 +125,12 @@ public class Hero extends Character
 
     public void UpdateTile()
     {
-        //stanga sus
-        //dreapta sus
-        //stanga jos
-        //dreapta jos
+        //stanga sus == dreapta jos (hitbox)
+        //stanga sus == soilTile
 
-        if(     refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y)/48) ==
-                refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/48    ,(int)(y+normalBounds.y + normalBounds.height)/48) &&
-                refLink.GetMap().GetTile((int)(x+normalBounds.x)/48                       ,(int)(y+normalBounds.y)/48) ==
+        if(     refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT) ==
+                refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT) &&
+                refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT) ==
                         Tile.soilTile
         )
         {

@@ -104,7 +104,7 @@ public class Map
         try {
             File inputFile = new File("res/maps/Map.txt");
             Scanner scanner = new Scanner(inputFile);
-            while (scanner.hasNextInt())
+            if (scanner.hasNextInt())
             {
                 height = scanner.nextInt();
                 width = scanner.nextInt();
