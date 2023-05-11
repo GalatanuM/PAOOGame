@@ -19,6 +19,7 @@ public class Assets
     public static BufferedImage heroRight2;
     public static BufferedImage heroRight3;
     public static BufferedImage soil;
+    public static BufferedImage seed;
     public static BufferedImage grass;
     public static BufferedImage mountain;
     public static BufferedImage townGrass;
@@ -51,6 +52,7 @@ public class Assets
         mountain = sheet.crop(3, 0);
         water = sheet.crop(4, 0);
         tree = sheet.crop(5,0);
+        seed = sheet.crop (0,1);
         heroLeft = sheet.crop(0, 2);
         heroLeft1 = sheet.crop(0, 3);
         heroLeft2 = sheet.crop(0, 4);

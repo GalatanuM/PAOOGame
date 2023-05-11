@@ -1,5 +1,7 @@
 package PaooGame.Tiles;
 
+import PaooGame.RefLinks;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -8,6 +10,7 @@ import java.awt.image.BufferedImage;
  */
 public class Tile
 {
+    protected boolean solid;
     private static final int NO_TILES   = 32;
     public static Tile[] tiles          = new Tile[NO_TILES];       /*!< Vector de referinte de tipuri de dale.*/
 
@@ -18,6 +21,8 @@ public class Tile
     public static Tile waterTile        = new WaterTile(2);     /*!< Dala de tip apa*/
     public static Tile treeTile         = new TreeTile(3);      /*!< Dala de tip copac*/
     public static Tile soilTile         = new SoilTile(4);      /*!< Dala de tip sol/pamant*/
+    public static Tile seedTile         = new SeedTile(5);      /*!< Dala de tip samanta*/
+    public static Tile seedTileSolid         = new SeedTileSolid(6);      /*!< Dala de tip samanta*/
 
     public static final int TILE_WIDTH  = 48;                       /*!< Latimea unei dale.*/
     public static final int TILE_HEIGHT = 48;                       /*!< Inaltimea unei dale.*/
@@ -35,7 +40,7 @@ public class Tile
     {
         img = image;
         id = idd;
-
+        solid=false;
         tiles[id] = this;
     }
 
@@ -65,7 +70,7 @@ public class Tile
      */
     public boolean IsSolid()
     {
-        return false;
+        return solid;
     }
 
     /*! \fn public int GetId()

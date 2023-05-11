@@ -1,8 +1,10 @@
 package PaooGame;
 
+import PaooGame.Items.Hero;
 import PaooGame.Maps.Map;
 
 import PaooGame.Input.KeyManager;
+import PaooGame.Tiles.Tile;
 
 /*! \class public class RefLinks
     \brief Clasa ce retine o serie de referinte ale unor elemente pentru a fi usor accesibile.
@@ -12,6 +14,8 @@ import PaooGame.Input.KeyManager;
 public class RefLinks
 {
     private Game game;          /*!< Referinta catre obiectul Game.*/
+
+    private Hero hero;          /*!< Referinta catre eroul curent.*/
     private Map map;            /*!< Referinta catre harta curenta.*/
 
     /*! \fn public RefLinks(Game game)
@@ -22,6 +26,7 @@ public class RefLinks
     public RefLinks(Game game)
     {
         this.game = game;
+        this.hero = Hero.getInstance(this,2* Tile.TILE_WIDTH, 1*Tile.TILE_HEIGHT);
     }
 
     /*! \fn public KeyManager GetKeyManager()
@@ -54,6 +59,14 @@ public class RefLinks
     public Game GetGame()
     {
         return game;
+    }
+
+    /*! \fn public Game GetGame()
+        \brief Intoarce referinta catre obiectul Game.
+     */
+    public Hero GetHero()
+    {
+        return hero;
     }
 
     /*! \fn public void SetGame(Game game)

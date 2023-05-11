@@ -34,9 +34,26 @@ public class Map
     /*! \fn public  void Update()
         \brief Actualizarea hartii in functie de evenimente (un copac a fost taiat)
      */
-    public  void Update()
+    public void Update()
     {
+        int heroPosX_stg = (int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH;
+        int heroPosX_drp = (int)(refLink.GetHero().GetX()+refLink.GetHero().getBoundX()+refLink.GetHero().getBoundWidth())/Tile.TILE_WIDTH;
 
+        int heroPosY_sus = (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT;
+        int heroPosY_jos = (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY()+refLink.GetHero().getBoundHeight())/Tile.TILE_HEIGHT;
+        for(int y = 0; y < refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT; y++)
+        {
+            for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
+            {
+                if(refLink.GetMap().GetTile(x,y).GetId()==5)
+                {
+                    if(x!=heroPosX_drp && x!=heroPosX_stg || y!=heroPosY_sus && y!=heroPosY_jos)
+                    {
+                        refLink.GetMap().SetTile(x,y,Tile.seedTileSolid);
+                    }
+                }
+            }
+        }
     }
 
     /*! \fn public void Draw(Graphics g)

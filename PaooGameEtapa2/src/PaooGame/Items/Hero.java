@@ -134,9 +134,8 @@ public class Hero extends Character
                         Tile.soilTile
         )
         {
-            refLink.GetMap().SetTile((int)(x+normalBounds.x)/48,(int)(y+normalBounds.y)/48,Tile.grassTile);
+            refLink.GetMap().SetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT,Tile.seedTile);
         }
-
     }
 
     /*! \fn public void Update()
@@ -445,6 +444,13 @@ public class Hero extends Character
         xMove = 0;
         yMove = 0;
 
+            ///Verificare apasare tasta shift
+        if(refLink.GetKeyManager().shift)
+        {
+            speed=3.0f;
+        }
+        else speed=2.0f;
+
             ///Verificare apasare tasta "sus"
         if(refLink.GetKeyManager().up && !refLink.GetKeyManager().left && !refLink.GetKeyManager().right && !refLink.GetKeyManager().down)
         {
@@ -509,7 +515,7 @@ public class Hero extends Character
         g.drawImage(image, (int)x, (int)y, width, height, null);
 
             ///doar pentru debug daca se doreste vizualizarea dreptunghiului de coliziune altfel se vor comenta urmatoarele doua linii
-        g.setColor(Color.blue);
-        g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
+        //g.setColor(Color.blue);
+        //g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
     }
 }
