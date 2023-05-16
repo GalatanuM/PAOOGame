@@ -1,6 +1,10 @@
 package PaooGame.Maps;
 
+import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
+import PaooGame.States.MenuState;
+import PaooGame.States.State;
+import PaooGame.Tiles.GrassTile;
 import PaooGame.Tiles.Tile;
 
 import java.awt.*;
@@ -17,6 +21,9 @@ public class Map
     private int width;          /*!< Latimea hartii in numar de dale.*/
     private int height;         /*!< Inaltimea hartii in numar de dale.*/
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
+    private int soilTileContor; /*!< Contor pentru numarul de tile-uri de tip pamant.*/
+
+    private State menuState;    /*!< Referinta catre menu.*/
 
     /*! \fn public Map(RefLinks refLink)
         \brief Constructorul de initializare al clasei.
@@ -27,6 +34,7 @@ public class Map
     {
             /// Retine referinta "shortcut".
         this.refLink = refLink;
+
             ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
         LoadWorld();
     }
@@ -50,9 +58,16 @@ public class Map
                     if(x!=heroPosX_drp && x!=heroPosX_stg || y!=heroPosY_sus && y!=heroPosY_jos)
                     {
                         refLink.GetMap().SetTile(x,y,Tile.seedTileSolid);
+                        soilTileContor--;
                     }
                 }
             }
+        }
+
+        if(soilTileContor==0)
+        {
+            menuState = MenuState.getInstance(refLink);
+            State.SetState(menuState);
         }
     }
 
@@ -63,20 +78,44 @@ public class Map
      */
     public void Draw(Graphics g)
     {
-        ///randare iarba
+        Hero hero = refLink.GetHero();
+        int heroX = (int)hero.GetX();
+        int heroY = (int)hero.GetY();
+
+        ///randare background
         for(int y = 0; y < refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT; y++)
         {
             for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
             {
-                Tile.grassTile.Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
+                Tile.waterTile.Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
             }
         }
-            ///Se parcurge matricea de dale (codurile aferente) si se deseneaza harta respectiva
-        for(int y = 0; y < refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT; y++)
+
+        for(int worldY = 0; worldY < height; worldY++)
         {
-            for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
+            for(int worldX = 0; worldX < width; worldX++)
             {
-                GetTile(x, y).Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
+                int tileX = worldX * Tile.TILE_HEIGHT;
+                int tileY = worldY * Tile.TILE_WIDTH;
+
+
+                int heroSX = hero.getScreenX();
+                int heroSY = hero.getScreenY();
+
+
+                int screenX = tileX - heroX + heroSX;
+                int screenY = tileY - heroY + heroSY;
+
+                if(
+                        tileX + Tile.TILE_HEIGHT > heroX - heroSX &&
+                                tileX - Tile.TILE_HEIGHT < heroX + heroSX &&
+                                tileY + Tile.TILE_WIDTH > heroY - heroSY &&
+                                tileY - Tile.TILE_WIDTH < heroY + heroSY
+                )
+                {
+                        Tile.grassTile.Draw(g, screenX, screenY); //iarba
+                        GetTile(worldX, worldY).Draw(g, screenX, screenY); //tile
+                }
             }
         }
     }
@@ -126,6 +165,7 @@ public class Map
                 height = scanner.nextInt();
                 width = scanner.nextInt();
                 tiles = new int[width][height];
+                soilTileContor = scanner.nextInt();
                 for(int y = 0; y < height; y++)
                 {
                     for(int x = 0; x < width; x++)

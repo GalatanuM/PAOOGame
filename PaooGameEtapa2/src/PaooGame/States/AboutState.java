@@ -9,15 +9,26 @@ import java.awt.*;
  */
 public class AboutState extends State
 {
+    private static AboutState aboutState = null;
+
     /*! \fn public AboutState(RefLinks refLink)
         \brief Constructorul de initializare al clasei.
 
         \param refLink O referinta catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    public AboutState(RefLinks refLink)
+    private AboutState(RefLinks refLink)
     {
             ///Apel al constructorului clasei de baza.
         super(refLink);
+    }
+
+    public static synchronized AboutState getInstance(RefLinks refLink)
+    {
+        if(aboutState == null)
+        {
+            aboutState = new AboutState(refLink);
+        }
+        return aboutState;
     }
     /*! \fn public void Update()
         \brief Actualizeaza starea curenta a meniu about.

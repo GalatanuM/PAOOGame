@@ -1,5 +1,6 @@
 package PaooGame.States;
 
+import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
 
 import java.awt.*;
@@ -9,12 +10,13 @@ import java.awt.*;
  */
 public class MenuState extends State
 {
+    private static MenuState menu = null;
     /*! \fn public MenuState(RefLinks refLink)
         \brief Constructorul de initializare al clasei.
 
         \param refLink O referinta catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    public MenuState(RefLinks refLink)
+    private MenuState(RefLinks refLink)
     {
             ///Apel al constructorului clasei de baza.
         super(refLink);
@@ -26,6 +28,15 @@ public class MenuState extends State
     public void Update()
     {
 
+    }
+
+    public static synchronized MenuState getInstance(RefLinks refLink)
+    {
+        if(menu == null)
+        {
+            menu = new MenuState(refLink);
+        }
+        return menu;
     }
 
     /*! \fn public void Draw(Graphics g)

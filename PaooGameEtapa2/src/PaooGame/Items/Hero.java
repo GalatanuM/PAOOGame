@@ -23,6 +23,9 @@ public class Hero extends Character
     private static Hero hero = null;
     private int animatie;
 
+    private final int screenX;
+    private final int screenY;
+
     /*! \fn private Hero(RefLinks refLink, float x, float y)
         \brief Constructorul de initializare al clasei Hero.
 
@@ -48,6 +51,18 @@ public class Hero extends Character
         attackBounds.y = 10;
         attackBounds.width = 38;
         attackBounds.height = 38;
+
+        screenX = (refLink.GetWidth() - Character.DEFAULT_CREATURE_WIDTH)/2;
+        screenY = (refLink.GetHeight() - Character.DEFAULT_CREATURE_HEIGHT)/2;
+    }
+
+    public int getScreenX()
+    {
+        return screenX;
+    }
+    public int getScreenY()
+    {
+        return screenY;
     }
 
     public static synchronized Hero getInstance(RefLinks refLink, float x, float y)
@@ -128,10 +143,12 @@ public class Hero extends Character
         //stanga sus == dreapta jos (hitbox)
         //stanga sus == soilTile
 
-        if(     refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT) ==
-                refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT) &&
-                refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT) ==
-                        Tile.soilTile
+
+        if(     (int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH ==
+                (int)(refLink.GetHero().GetX()+refLink.GetHero().getBoundX()+refLink.GetHero().getBoundWidth())/Tile.TILE_WIDTH &&
+                (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT ==
+                        (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY()+refLink.GetHero().getBoundHeight())/Tile.TILE_HEIGHT &&
+                refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT) == Tile.soilTile
         )
         {
             refLink.GetMap().SetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT,Tile.seedTile);
@@ -447,9 +464,9 @@ public class Hero extends Character
             ///Verificare apasare tasta shift
         if(refLink.GetKeyManager().shift)
         {
-            speed=3.0f;
+            speed=4.0f;
         }
-        else speed=2.0f;
+        else speed=3.0f;
 
             ///Verificare apasare tasta "sus"
         if(refLink.GetKeyManager().up && !refLink.GetKeyManager().left && !refLink.GetKeyManager().right && !refLink.GetKeyManager().down)
@@ -512,10 +529,10 @@ public class Hero extends Character
     @Override
     public void Draw(Graphics g)
     {
-        g.drawImage(image, (int)x, (int)y, width, height, null);
+        g.drawImage(image, (int)screenX, (int)screenY, width, height, null);
 
             ///doar pentru debug daca se doreste vizualizarea dreptunghiului de coliziune altfel se vor comenta urmatoarele doua linii
-        //g.setColor(Color.blue);
-        //g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
+        g.setColor(Color.blue);
+        g.fillRect((int)(screenX + bounds.x), (int)(screenY + bounds.y), bounds.width, bounds.height);
     }
 }

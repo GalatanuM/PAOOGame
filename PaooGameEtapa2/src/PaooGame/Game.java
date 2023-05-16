@@ -112,10 +112,10 @@ public class Game implements Runnable
             ///Se construieste obiectul de tip shortcut ce va retine o serie de referinte catre elementele importante din program.
         refLink = new RefLinks(this);
             ///Definirea starilor programului
-        playState       = new PlayState(refLink);
-        menuState       = new MenuState(refLink);
-        settingsState   = new SettingsState(refLink);
-        aboutState      = new AboutState(refLink);
+        playState       = PlayState.getInstance(refLink);
+        menuState       = MenuState.getInstance(refLink);
+        settingsState   = SettingsState.getInstance(refLink);
+        aboutState      = AboutState.getInstance(refLink);
             ///Seteaza starea implicita cu care va fi lansat programul in executie
         State.SetState(playState);
     }

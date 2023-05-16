@@ -13,7 +13,7 @@ import java.awt.*;
 public class PlayState extends State
 {
     private Hero hero;  /*!< Referinta catre obiectul animat erou (controlat de utilizator).*/
-
+    private static PlayState playState = null;
     private Map map;    /*!< Referinta catre harta curenta.*/
 
     /*! \fn public PlayState(RefLinks refLink)
@@ -21,7 +21,7 @@ public class PlayState extends State
 
         \param refLink O referinta catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    public PlayState(RefLinks refLink)
+    private PlayState(RefLinks refLink)
     {
             ///Apel al constructorului clasei de baza
         super(refLink);
@@ -30,7 +30,16 @@ public class PlayState extends State
             ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
         refLink.SetMap(map);
             ///Construieste eroul
-        hero = Hero.getInstance(refLink,2* Tile.TILE_WIDTH, 1*Tile.TILE_HEIGHT);
+        hero = Hero.getInstance(refLink,0, 0);
+    }
+
+    public static synchronized PlayState getInstance(RefLinks refLink)
+    {
+        if(playState == null)
+        {
+            playState = new PlayState(refLink);
+        }
+        return playState;
     }
 
     /*! \fn public void Update()

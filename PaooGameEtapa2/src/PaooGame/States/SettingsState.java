@@ -4,6 +4,7 @@ import PaooGame.RefLinks;
 
 import java.awt.*;
 
+
 /*! \class public class SettingsState extends State
     \brief Implementeaza notiunea de settings pentru joc.
 
@@ -11,17 +12,26 @@ import java.awt.*;
  */
 public class SettingsState extends State
 {
+    private static SettingsState settingsState = null;
     /*! \fn public SettingsState(RefLinks refLink)
         \brief Constructorul de initializare al clasei.
 
         \param refLink O referinta catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    public SettingsState(RefLinks refLink)
+    private SettingsState(RefLinks refLink)
     {
             ///Apel al construcotrului clasei de baza.
         super(refLink);
     }
 
+    public static synchronized SettingsState getInstance(RefLinks refLink)
+    {
+        if(settingsState == null)
+        {
+            settingsState = new SettingsState(refLink);
+        }
+        return settingsState;
+    }
     /*! \fn public void Update()
         \brief Actualizeaza starea setarilor.
      */
