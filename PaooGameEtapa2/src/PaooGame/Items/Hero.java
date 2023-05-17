@@ -44,13 +44,7 @@ public class Hero extends Character
         normalBounds.x = 16;
         normalBounds.y = 16;
         normalBounds.width = 16;
-        normalBounds.height = 32;
-
-            ///Stabilieste pozitia relativa si dimensiunea dreptunghiului de coliziune, starea de atac
-        attackBounds.x = 10;
-        attackBounds.y = 10;
-        attackBounds.width = 38;
-        attackBounds.height = 38;
+        normalBounds.height = 24;
 
         screenX = (refLink.GetWidth() - Character.DEFAULT_CREATURE_WIDTH)/2;
         screenY = (refLink.GetHeight() - Character.DEFAULT_CREATURE_HEIGHT)/2;

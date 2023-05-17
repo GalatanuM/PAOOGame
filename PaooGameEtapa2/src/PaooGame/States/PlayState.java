@@ -31,6 +31,8 @@ public class PlayState extends State
         refLink.SetMap(map);
             ///Construieste eroul
         hero = Hero.getInstance(refLink,0, 0);
+        hero.SetX(map.spawnX()*Tile.TILE_WIDTH);
+        hero.SetY(map.spawnY()*Tile.TILE_HEIGHT);
     }
 
     public static synchronized PlayState getInstance(RefLinks refLink)

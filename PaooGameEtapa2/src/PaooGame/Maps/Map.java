@@ -23,6 +23,9 @@ public class Map
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
     private int soilTileContor; /*!< Contor pentru numarul de tile-uri de tip pamant.*/
 
+    private final Point spawnPoint = new Point();
+    private final Point nextPoint = new Point();
+    private int level = 1;
     private State menuState;    /*!< Referinta catre menu.*/
 
     /*! \fn public Map(RefLinks refLink)
@@ -36,7 +39,7 @@ public class Map
         this.refLink = refLink;
 
             ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
-        LoadWorld();
+        LoadWorld(level);
     }
 
     /*! \fn public  void Update()
@@ -64,10 +67,11 @@ public class Map
             }
         }
 
-        if(soilTileContor==0)
+        if(soilTileContor==0 && GetTile((int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT)==Tile.finishTile)
         {
-            menuState = MenuState.getInstance(refLink);
-            State.SetState(menuState);
+            nextLevel();
+            refLink.GetHero().SetX(spawnPoint.x*Tile.TILE_HEIGHT);
+            refLink.GetHero().SetY(spawnPoint.y*Tile.TILE_HEIGHT);
         }
     }
 
@@ -155,10 +159,10 @@ public class Map
         \brief Functie de incarcare a hartii jocului.
         Aici se poate genera sau incarca din fisier harta
      */
-    private void LoadWorld()
+    private void LoadWorld(int level)
     {
         try {
-            File inputFile = new File("res/maps/Map.txt");
+            File inputFile = new File("res/maps/Map"+level+".txt");
             Scanner scanner = new Scanner(inputFile);
             if (scanner.hasNextInt())
             {
@@ -166,6 +170,8 @@ public class Map
                 width = scanner.nextInt();
                 tiles = new int[width][height];
                 soilTileContor = scanner.nextInt();
+                nextPoint.setLocation(scanner.nextInt(), scanner.nextInt());
+                spawnPoint.setLocation(scanner.nextInt(), scanner.nextInt());
                 for(int y = 0; y < height; y++)
                 {
                     for(int x = 0; x < width; x++)
@@ -178,5 +184,30 @@ public class Map
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
         }
+    }
+
+    public void nextLevel()
+    {
+        switch (level)
+        {
+            case 1: level=2;
+            break;
+            case 2: level=3;
+            break;
+            case 3: level=1;
+            break;
+            default: level=1;
+        }
+        LoadWorld(level);
+    }
+
+    public int spawnX()
+    {
+        return spawnPoint.x;
+    }
+
+    public int spawnY()
+    {
+        return spawnPoint.y;
     }
 }

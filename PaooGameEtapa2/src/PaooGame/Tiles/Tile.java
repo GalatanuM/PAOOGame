@@ -23,10 +23,9 @@ public class Tile
     public static Tile soilTile         = new SoilTile(4);      /*!< Dala de tip sol/pamant*/
     public static Tile seedTile         = new SeedTile(5);      /*!< Dala de tip samanta*/
     public static Tile seedTileSolid         = new SeedTileSolid(6);      /*!< Dala de tip samanta*/
-
+    public static Tile finishTile         = new FinishTile(7);      /*!< Dala de tip final*/
     public static final int TILE_WIDTH  = 48;                       /*!< Latimea unei dale.*/
     public static final int TILE_HEIGHT = 48;                       /*!< Inaltimea unei dale.*/
-
     protected BufferedImage img;                                    /*!< Imaginea aferenta tipului de dala.*/
     protected final int id;                                         /*!< Id-ul unic aferent tipului de dala.*/
 

@@ -33,6 +33,7 @@ public class Assets
     public static BufferedImage heroDown2;
     public static BufferedImage heroDown3;
     public static BufferedImage tree;
+    public static BufferedImage finish;
 
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
@@ -69,5 +70,6 @@ public class Assets
         heroUp1 = sheet.crop(3, 3);
         heroUp2 = sheet.crop(3, 4);
         heroUp3 = sheet.crop(3, 5);
+        finish = sheet.crop(1,1);
     }
 }
