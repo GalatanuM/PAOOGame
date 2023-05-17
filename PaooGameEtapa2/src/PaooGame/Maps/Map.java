@@ -67,9 +67,10 @@ public class Map
             }
         }
 
-        if(soilTileContor==0 && GetTile((int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT)==Tile.finishTile)
+        if(soilTileContor==0 &&
+                GetTile((int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT) == Tile.finishTile &&
+                GetTile((int)(refLink.GetHero().GetX()+refLink.GetHero().getBoundX()+refLink.GetHero().getBoundWidth())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY()+refLink.GetHero().getBoundHeight())/Tile.TILE_HEIGHT)==Tile.finishTile)
         {
-            nextLevel();
             refLink.GetHero().SetX(spawnPoint.x*Tile.TILE_HEIGHT);
             refLink.GetHero().SetY(spawnPoint.y*Tile.TILE_HEIGHT);
         }
@@ -162,7 +163,7 @@ public class Map
     private void LoadWorld(int level)
     {
         try {
-            File inputFile = new File("res/maps/Map"+level+".txt");
+            File inputFile = new File("res/maps/Map1.txt");
             Scanner scanner = new Scanner(inputFile);
             if (scanner.hasNextInt())
             {
@@ -170,7 +171,6 @@ public class Map
                 width = scanner.nextInt();
                 tiles = new int[width][height];
                 soilTileContor = scanner.nextInt();
-                nextPoint.setLocation(scanner.nextInt(), scanner.nextInt());
                 spawnPoint.setLocation(scanner.nextInt(), scanner.nextInt());
                 for(int y = 0; y < height; y++)
                 {
@@ -186,20 +186,6 @@ public class Map
         }
     }
 
-    public void nextLevel()
-    {
-        switch (level)
-        {
-            case 1: level=2;
-            break;
-            case 2: level=3;
-            break;
-            case 3: level=1;
-            break;
-            default: level=1;
-        }
-        LoadWorld(level);
-    }
 
     public int spawnX()
     {

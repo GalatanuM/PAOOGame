@@ -21,18 +21,18 @@ public class PlayState extends State
 
         \param refLink O referinta catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    private PlayState(RefLinks refLink)
+    PlayState(RefLinks refLink)
     {
             ///Apel al constructorului clasei de baza
         super(refLink);
-            ///Construieste harta jocului
+        /*    ///Construieste harta jocului
         map = new Map(refLink);
             ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
         refLink.SetMap(map);
             ///Construieste eroul
         hero = Hero.getInstance(refLink,0, 0);
         hero.SetX(map.spawnX()*Tile.TILE_WIDTH);
-        hero.SetY(map.spawnY()*Tile.TILE_HEIGHT);
+        hero.SetY(map.spawnY()*Tile.TILE_HEIGHT);*/
     }
 
     public static synchronized PlayState getInstance(RefLinks refLink)
@@ -44,14 +44,15 @@ public class PlayState extends State
         return playState;
     }
 
+
     /*! \fn public void Update()
         \brief Actualizeaza starea curenta a jocului.
      */
     @Override
     public void Update()
     {
-        map.Update();
-        hero.Update();
+       /* map.Update();
+        hero.Update();*/
     }
 
     /*! \fn public void Draw(Graphics g)
@@ -62,7 +63,7 @@ public class PlayState extends State
     @Override
     public void Draw(Graphics g)
     {
-        map.Draw(g);
-        hero.Draw(g);
+        /*map.Draw(g);
+        hero.Draw(g);*/
     }
 }
