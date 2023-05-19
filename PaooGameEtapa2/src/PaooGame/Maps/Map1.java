@@ -6,12 +6,12 @@ import PaooGame.States.MenuState;
 import PaooGame.States.PlayState1;
 import PaooGame.States.PlayState2;
 import PaooGame.States.State;
-import PaooGame.Tiles.GrassTile;
 import PaooGame.Tiles.Tile;
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.*;
 import java.util.Scanner;
 
 /*! \class public class Map
@@ -84,48 +84,16 @@ public class Map1 extends Map
 
         \param g Contextl grafi in care se realizeaza desenarea.
      */
-    public void Draw(Graphics g)
-    {
-        Hero hero = refLink.GetHero();
-        int heroX = (int)hero.GetX();
-        int heroY = (int)hero.GetY();
-
-        ///randare background
-        for(int y = 0; y < refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT; y++)
-        {
-            for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
-            {
-                Tile.waterTile.Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
+    public void Draw(Graphics g, Hero player) {
+        int offsetX = (int) ((refLink.GetGame().GetWidth()-refLink.GetHero().GetWidth())/2 - player.GetX());
+        int offsetY = (int) ((refLink.GetGame().GetHeight()-refLink.GetHero().GetHeight())/2 - player.GetY());
+        g.translate(offsetX, offsetY);
+        for (int y =0; y < refLink.GetGame().GetHeight() / Tile.TILE_HEIGHT; y++) {
+            for (int x = 0; x < refLink.GetGame().GetWidth() / Tile.TILE_WIDTH; x++) {
+                GetTile(x, y).Draw(g, (int) x * Tile.TILE_HEIGHT, (int) y * Tile.TILE_WIDTH);
             }
         }
 
-        for(int worldY = 0; worldY < height; worldY++)
-        {
-            for(int worldX = 0; worldX < width; worldX++)
-            {
-                int tileX = worldX * Tile.TILE_HEIGHT;
-                int tileY = worldY * Tile.TILE_WIDTH;
-
-
-                int heroSX = hero.getScreenX();
-                int heroSY = hero.getScreenY();
-
-
-                int screenX = tileX - heroX + heroSX;
-                int screenY = tileY - heroY + heroSY;
-
-                if(
-                        tileX + Tile.TILE_HEIGHT > heroX - heroSX &&
-                                tileX - Tile.TILE_HEIGHT < heroX + heroSX &&
-                                tileY + Tile.TILE_WIDTH > heroY - heroSY &&
-                                tileY - Tile.TILE_WIDTH < heroY + heroSY
-                )
-                {
-                    Tile.grassTile.Draw(g, screenX, screenY); //iarba
-                    GetTile(worldX, worldY).Draw(g, screenX, screenY); //tile
-                }
-            }
-        }
     }
 
     /*! \fn public Tile GetTile(int x, int y)

@@ -1,52 +1,100 @@
 package PaooGame.States;
 
-import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
 
 import java.awt.*;
+import java.util.Vector;
 
-/*! \class public class MenuState extends State
-    \brief Implementeaza notiunea de menu pentru joc.
- */
 public class MenuState extends State
 {
-    private static MenuState menu = null;
-    /*! \fn public MenuState(RefLinks refLink)
-        \brief Constructorul de initializare al clasei.
+    static int pressed = 0, hold = 0;
+    int t = 0;
+    private static int currentOption = 0;
 
-        \param refLink O referinta catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
-     */
+    private static MenuState menu = null;
+    Font menuFont;
+    Vector<String> options;
     private MenuState(RefLinks refLink)
     {
-            ///Apel al constructorului clasei de baza.
         super(refLink);
-    }
-    /*! \fn public void Update()
-        \brief Actualizeaza starea curenta a meniului.
-     */
-    @Override
-    public void Update()
-    {
-
+        menuFont = new Font("Arial", Font.PLAIN,40);
+        options = new Vector<>();
+        options.add("Start");
+        options.add("Load Game");
+        options.add("Options");
+        options.add("About");
+        options.add("Exit");
+        options.add("Test");
     }
 
     public static synchronized MenuState getInstance(RefLinks refLink)
     {
         if(menu == null)
         {
-            menu = new MenuState(refLink);
+           menu = new MenuState(refLink);
         }
         return menu;
     }
-
-    /*! \fn public void Draw(Graphics g)
-        \brief Deseneaza (randeaza) pe ecran starea curenta a meniului.
-
-        \param g Contextul grafic in care trebuie sa deseneze starea jocului pe ecran.
-     */
+    @Override
+    public void Update()
+    {
+        Select();
+    }
+    public void Select()
+    {
+        int nextPos = 0;
+        if (refLink.GetKeyManager().up)
+        {
+            pressed = 1;
+            nextPos = -1;
+        }
+        else
+        if (refLink.GetKeyManager().down)
+        {
+            pressed = 1;
+            nextPos = 1;
+        }
+        else
+        {
+            pressed = 0;
+        }
+        if(hold == 0)
+        {
+            currentOption += nextPos;
+            if (currentOption > options.size() - 1) {
+                currentOption = 0;
+            }
+            if (currentOption < 0) {
+                currentOption = options.size() - 1;
+            }
+        }
+        hold = pressed;
+    }
     @Override
     public void Draw(Graphics g)
     {
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0, refLink.GetWidth(), refLink.GetHeight());
 
+        g.setFont(menuFont);
+        g.setColor(Color.white);
+        g.drawString("Option = " + currentOption,100,100);
+
+        for(int i = 0; i < options.size(); ++i)
+        {
+            if(currentOption == i)
+                g.setColor(Color.blue);
+            else
+                g.setColor(Color.white);
+            g.drawString(options.get(i), refLink.GetWidth()/2 - 100,refLink.GetHeight()/2+i*40);
+        }
+    }
+    public int midScreen(String s)
+    {
+        return refLink.GetWidth()/2 - menuFont.getSize() * s.length()/2;
+    }
+    public static int getCurrentOption()
+    {
+        return currentOption;
     }
 }
