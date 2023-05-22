@@ -3,10 +3,10 @@ package PaooGame.Items;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import PaooGame.Maps.Map;
 import PaooGame.RefLinks;
 import PaooGame.Graphics.Assets;
 import PaooGame.Tiles.Tile;
-
 import static java.lang.Math.sqrt;
 
 /*! \class public class Hero extends Character
@@ -92,11 +92,18 @@ public class Hero extends Character
         //dreapta sus
         //stanga jos
         //dreapta jos
-
-        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x+ xMove )/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y )/Tile.TILE_HEIGHT).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y )/Tile.TILE_HEIGHT).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x + xMove)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT).IsSolid()
+        Map map = null;
+        switch (Map.level)
+        {
+            case 1: map=refLink.GetMap1(); break;
+            case 2: map=refLink.GetMap2(); break;
+            case 3: map=refLink.GetMap3(); break;
+            case 4: map=refLink.GetMap4(); break;
+        }
+        if(     !map.GetTile((int)(x+normalBounds.x+ xMove )/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y )/Tile.TILE_HEIGHT).IsSolid() &&
+                !map.GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y )/Tile.TILE_HEIGHT).IsSolid() &&
+                !map.GetTile((int)(x+normalBounds.x + xMove)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT).IsSolid() &&
+                !map.GetTile((int)(x+normalBounds.x+ normalBounds.width + xMove)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height)/Tile.TILE_HEIGHT).IsSolid()
             )
         {
             if (xMove < 0 && x+xMove > -normalBounds.x) //la stanga
@@ -119,10 +126,19 @@ public class Hero extends Character
         //stanga jos
         //dreapta jos
 
-        if(     !refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y + normalBounds.height+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
-                !refLink.GetMap().GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/Tile.TILE_HEIGHT).IsSolid()
+        Map map = null;
+        switch (Map.level)
+        {
+            case 1: map=refLink.GetMap1(); break;
+            case 2: map=refLink.GetMap2(); break;
+            case 3: map=refLink.GetMap3(); break;
+            case 4: map=refLink.GetMap4(); break;
+        }
+        //System.out.println(Map.level);
+        if(     !map.GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
+                !map.GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
+                !map.GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y + normalBounds.height+yMove)/Tile.TILE_HEIGHT).IsSolid() &&
+                !map.GetTile((int)(x+normalBounds.x+ normalBounds.width)/Tile.TILE_WIDTH    ,(int)(y+normalBounds.y + normalBounds.height+yMove)/Tile.TILE_HEIGHT).IsSolid()
         )
         {
             if (yMove < 0 && y+yMove > -normalBounds.y)
@@ -137,15 +153,23 @@ public class Hero extends Character
         //stanga sus == dreapta jos (hitbox)
         //stanga sus == soilTile
 
+        Map map = null;
+        switch (Map.level)
+        {
+            case 1: map=refLink.GetMap1(); break;
+            case 2: map=refLink.GetMap2(); break;
+            case 3: map=refLink.GetMap3(); break;
+            case 4: map=refLink.GetMap4(); break;
+        }
 
         if(     (int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH ==
                 (int)(refLink.GetHero().GetX()+refLink.GetHero().getBoundX()+refLink.GetHero().getBoundWidth())/Tile.TILE_WIDTH &&
                 (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT ==
                         (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY()+refLink.GetHero().getBoundHeight())/Tile.TILE_HEIGHT &&
-                refLink.GetMap().GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT) == Tile.soilTile
+                map.GetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH                       ,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT) == Tile.soilTile
         )
         {
-            refLink.GetMap().SetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT,Tile.seedTile);
+            map.SetTile((int)(x+normalBounds.x)/Tile.TILE_WIDTH,(int)(y+normalBounds.y)/Tile.TILE_HEIGHT,Tile.seedTile);
         }
     }
 
@@ -523,10 +547,10 @@ public class Hero extends Character
     @Override
     public void Draw(Graphics g)
     {
-        g.drawImage(image, (int)screenX, (int)screenY, width, height, null);
+        g.drawImage(image, (int)x, (int)y, width, height, null);
 
             ///doar pentru debug daca se doreste vizualizarea dreptunghiului de coliziune altfel se vor comenta urmatoarele doua linii
         g.setColor(Color.blue);
-        g.fillRect((int)(screenX + bounds.x), (int)(screenY + bounds.y), bounds.width, bounds.height);
+        g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
     }
 }

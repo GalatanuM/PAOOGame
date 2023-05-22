@@ -19,12 +19,10 @@ public class MenuState extends State
         super(refLink);
         menuFont = new Font("Arial", Font.PLAIN,40);
         options = new Vector<>();
-        options.add("Start");
-        options.add("Load Game");
-        options.add("Options");
-        options.add("About");
+        options.add("Resume");
+        options.add("Save game");
+        options.add("Settings");
         options.add("Exit");
-        options.add("Test");
     }
 
     public static synchronized MenuState getInstance(RefLinks refLink)
@@ -70,6 +68,7 @@ public class MenuState extends State
         }
         hold = pressed;
     }
+
     @Override
     public void Draw(Graphics g)
     {

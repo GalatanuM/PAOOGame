@@ -16,6 +16,8 @@ public abstract class State
     private static State previousState  = null; /*!< Referinta catre starea anterioara a jocului.*/
     private static State currentState   = null; /*!< Referinta catre starea curenta a jocului: game, meniu, settings, about etc.*/
     protected RefLinks refLink;
+
+    public static int scor=0;
     public State(RefLinks refLink)
     {
         this.refLink = refLink;
@@ -41,4 +43,18 @@ public abstract class State
     public abstract void Update();
         ///Metoda abstracta destinata desenarii starii curente
     public abstract void Draw(Graphics g);
+
+    public static State getPreviousState()
+    {
+        return previousState;
+    }
+    public static void resetScore()
+    {
+        scor=0;
+    }
+    public static void incScor()
+    {
+        scor++;
+    }
+    public static int getScor(){return scor;}
 }

@@ -1,17 +1,13 @@
 package PaooGame.Maps;
 
-import PaooGame.Items.Hero;
+import PaooGame.Database.Database;
 import PaooGame.RefLinks;
-import PaooGame.States.MenuState;
-import PaooGame.States.PlayState1;
-import PaooGame.States.PlayState2;
-import PaooGame.States.State;
 import PaooGame.Tiles.Tile;
 
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.*;
 import java.util.Scanner;
 
 /*! \class public class Map
@@ -24,10 +20,9 @@ public class Map1 extends Map
     private int height;         /*!< Inaltimea hartii in numar de dale.*/
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
     private int soilTileContor; /*!< Contor pentru numarul de tile-uri de tip pamant.*/
-
+    private static boolean over=false;
+    public Map1 map1ref;
     private final Point spawnPoint = new Point();
-    private int level = 1;
-    private State menuState;    /*!< Referinta catre menu.*/
 
     /*! \fn public Map(RefLinks refLink)
         \brief Constructorul de initializare al clasei.
@@ -39,9 +34,23 @@ public class Map1 extends Map
         super(refLink);
         /// Retine referinta "shortcut".
         this.refLink = refLink;
-
+        over=false;
+        level=1;
         ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
         LoadWorld(level);
+        map1ref=this;
+    }
+
+    public Map1(RefLinks refLink,String path)
+    {
+        super(refLink);
+        /// Retine referinta "shortcut".
+        this.refLink = refLink;
+        over=false;
+        level=1;
+        ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
+        LoadWorld(path);
+        map1ref=this;
     }
 
     /*! \fn public  void Update()
@@ -58,11 +67,11 @@ public class Map1 extends Map
         {
             for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
             {
-                if(refLink.GetMap().GetTile(x,y).GetId()==5)
+                if(GetTile(x,y).GetId()==5)
                 {
                     if(x!=heroPosX_drp && x!=heroPosX_stg || y!=heroPosY_sus && y!=heroPosY_jos)
                     {
-                        refLink.GetMap().SetTile(x,y,Tile.seedTileSolid);
+                        SetTile(x,y,Tile.seedTileSolid);
                         soilTileContor--;
                     }
                 }
@@ -73,28 +82,37 @@ public class Map1 extends Map
                 GetTile((int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT) == Tile.finishTile &&
                 GetTile((int)(refLink.GetHero().GetX()+refLink.GetHero().getBoundX()+refLink.GetHero().getBoundWidth())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY()+refLink.GetHero().getBoundHeight())/Tile.TILE_HEIGHT)==Tile.finishTile)
         {
-            refLink.GetHero().SetX(spawnPoint.x*Tile.TILE_HEIGHT);
-            refLink.GetHero().SetY(spawnPoint.y*Tile.TILE_HEIGHT);
-            State.SetState(PlayState2.getInstance(refLink));
+            over=true;
         }
     }
 
+    public static boolean isOver()
+    {
+        return over;
+    }
+    public int getSoilTileContor()
+    {
+        return soilTileContor;
+    }
     /*! \fn public void Draw(Graphics g)
         \brief Functia de desenare a hartii.
 
         \param g Contextl grafi in care se realizeaza desenarea.
      */
-    public void Draw(Graphics g, Hero player) {
-        int offsetX = (int) ((refLink.GetGame().GetWidth()-refLink.GetHero().GetWidth())/2 - player.GetX());
-        int offsetY = (int) ((refLink.GetGame().GetHeight()-refLink.GetHero().GetHeight())/2 - player.GetY());
+    public void Draw(Graphics g)
+    {
+        int offsetX = (int) ((refLink.GetGame().GetWidth()-refLink.GetHero().GetWidth())/2 - refLink.GetHero().GetX());
+        int offsetY = (int) ((refLink.GetGame().GetHeight()-refLink.GetHero().GetHeight())/2 - refLink.GetHero().GetY());
         g.translate(offsetX, offsetY);
         for (int y =0; y < refLink.GetGame().GetHeight() / Tile.TILE_HEIGHT; y++) {
             for (int x = 0; x < refLink.GetGame().GetWidth() / Tile.TILE_WIDTH; x++) {
+                Tile.grassTile.Draw(g, (int) x * Tile.TILE_HEIGHT, (int) y * Tile.TILE_WIDTH);
                 GetTile(x, y).Draw(g, (int) x * Tile.TILE_HEIGHT, (int) y * Tile.TILE_WIDTH);
             }
         }
-
     }
+
+
 
     /*! \fn public Tile GetTile(int x, int y)
         \brief Intoarce o referinta catre dala aferenta codului din matrice de dale.
@@ -157,6 +175,32 @@ public class Map1 extends Map
         }
     }
 
+    private void LoadWorld(String path)
+    {
+        try {
+            File inputFile = new File(path);
+            Scanner scanner = new Scanner(inputFile);
+            if (scanner.hasNextInt())
+            {
+                height = scanner.nextInt();
+                width = scanner.nextInt();
+                tiles = new int[width][height];
+                soilTileContor = scanner.nextInt();
+                spawnPoint.setLocation(scanner.nextInt(), scanner.nextInt());
+                for(int y = 0; y < height; y++)
+                {
+                    for(int x = 0; x < width; x++)
+                    {
+                        tiles[x][y] = scanner.nextInt();
+                    }
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
+    }
+
     public int spawnX()
     {
         return spawnPoint.x;
@@ -165,5 +209,19 @@ public class Map1 extends Map
     public int spawnY()
     {
         return spawnPoint.y;
+    }
+
+    public String mapToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<height;i++)
+        {
+            for(int j=0;j<width;j++)
+            {
+                sb.append(tiles[j][i]).append(" ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

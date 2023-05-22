@@ -16,7 +16,7 @@ import java.util.Scanner;
 /*! \class public class Map
     \brief Implementeaza notiunea de harta a jocului.
  */
-public class Map3 extends Map
+public class Map4 extends Map
 {
     private RefLinks refLink;   /*!< O referinte catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.*/
     private int width;          /*!< Latimea hartii in numar de dale.*/
@@ -25,8 +25,7 @@ public class Map3 extends Map
     private int soilTileContor; /*!< Contor pentru numarul de tile-uri de tip pamant.*/
 
     private static boolean over=false;
-    public Map3 map3ref;
-
+    public Map4 map4ref;
     private final Point spawnPoint = new Point();
     private State menuState;    /*!< Referinta catre menu.*/
 
@@ -35,28 +34,28 @@ public class Map3 extends Map
 
         \param refLink O referinte catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    public Map3(RefLinks refLink)
+    public Map4(RefLinks refLink)
     {
         super(refLink);
         /// Retine referinta "shortcut".
         this.refLink = refLink;
         over=false;
-        level=3;
+        level=4;
         ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
         LoadWorld(level);
-        map3ref=this;
+        map4ref=this;
     }
 
-    public Map3(RefLinks refLink,String path)
+    public Map4(RefLinks refLink,String path)
     {
         super(refLink);
         /// Retine referinta "shortcut".
         this.refLink = refLink;
         over=false;
-        level=3;
+        level=4;
         ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
         LoadWorld(path);
-        map3ref=this;
+        map4ref=this;
     }
 
     /*! \fn public  void Update()

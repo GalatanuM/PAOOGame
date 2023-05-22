@@ -1,10 +1,13 @@
 package PaooGame;
 
+import PaooGame.Database.Database;
 import PaooGame.Items.Hero;
-import PaooGame.Maps.Map;
+import PaooGame.Maps.*;
 
 import PaooGame.Input.KeyManager;
 import PaooGame.Tiles.Tile;
+
+import javax.xml.crypto.Data;
 
 /*! \class public class RefLinks
     \brief Clasa ce retine o serie de referinte ale unor elemente pentru a fi usor accesibile.
@@ -17,6 +20,11 @@ public class RefLinks
 
     private Hero hero;          /*!< Referinta catre eroul curent.*/
     private Map map;            /*!< Referinta catre harta curenta.*/
+    private Map1 map1;            /*!< Referinta catre harta1 curenta.*/
+    private Map2 map2;            /*!< Referinta catre harta2 curenta.*/
+    private Map3 map3;            /*!< Referinta catre harta3 curenta.*/
+    private Map4 map4;            /*!< Referinta catre harta4 curenta.*/
+    private Database database;
 
     /*! \fn public RefLinks(Game game)
         \brief Constructorul de initializare al clasei.
@@ -26,7 +34,8 @@ public class RefLinks
     public RefLinks(Game game)
     {
         this.game = game;
-        this.hero = Hero.getInstance(this,2* Tile.TILE_WIDTH, 1*Tile.TILE_HEIGHT);
+        this.hero = Hero.getInstance(this,0, 0);
+        this.database = Database.getInstance(this);
     }
 
     /*! \fn public KeyManager GetKeyManager()
@@ -69,6 +78,8 @@ public class RefLinks
         return hero;
     }
 
+    public Database getDatabase(){return database;}
+
     /*! \fn public void SetGame(Game game)
         \brief Seteaza referinta catre un obiect Game.
 
@@ -86,6 +97,35 @@ public class RefLinks
     {
         return map;
     }
+    /*! \fn public Map GetMap()
+        \brief Intoarce referinta catre harta curenta.
+     */
+    public Map1 GetMap1()
+    {
+        return map1;
+    }
+    /*! \fn public Map GetMap()
+        \brief Intoarce referinta catre harta curenta.
+     */
+    public Map2 GetMap2()
+    {
+        return map2;
+    }
+    /*! \fn public Map GetMap()
+        \brief Intoarce referinta catre harta curenta.
+     */
+    public Map3 GetMap3()
+    {
+        return map3;
+    }
+
+    /*! \fn public Map GetMap()
+        \brief Intoarce referinta catre harta curenta.
+     */
+    public Map4 GetMap4()
+    {
+        return map4;
+    }
 
     /*! \fn public void SetMap(Map map)
         \brief Seteaza referinta catre harta curenta.
@@ -95,5 +135,21 @@ public class RefLinks
     public void SetMap(Map map)
     {
         this.map = map;
+    }
+    public void SetMap1(Map1 map)
+    {
+        this.map1 = map;
+    }
+    public void SetMap2(Map2 map)
+    {
+        this.map2 = map;
+    }
+    public void SetMap3(Map3 map)
+    {
+        this.map3 = map;
+    }
+    public void SetMap4(Map4 map)
+    {
+        this.map4 = map;
     }
 }

@@ -2,8 +2,7 @@ package PaooGame.States;
 
 import PaooGame.Items.Hero;
 import PaooGame.Maps.Map1;
-import PaooGame.Maps.Map3;
-import PaooGame.Maps.Map2;
+import PaooGame.Maps.Map4;
 import PaooGame.RefLinks;
 import PaooGame.Tiles.Tile;
 
@@ -12,39 +11,38 @@ import java.awt.*;
 /*! \class public class PlayState extends State
     \brief Implementeaza/controleaza jocul.
  */
-public class PlayState3 extends PlayState
+public class PlayState4 extends PlayState
 {
     private Hero hero;  /*!< Referinta catre obiectul animat erou (controlat de utilizator).*/
-    private Map3 map;    /*!< Referinta catre harta curenta.*/
+    private Map4 map;    /*!< Referinta catre harta curenta.*/
 
     /*! \fn public PlayState(RefLinks refLink)
         \brief Constructorul de initializare al clasei
         \param refLink O referinta catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    public PlayState3(RefLinks refLink)
+    public PlayState4(RefLinks refLink)
     {
         ///Apel al constructorului clasei de baza
         super(refLink);
         ///Construieste harta jocului
-        map = new Map3(refLink);
+        map = new Map4(refLink);
         ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
-        refLink.SetMap3(map);
-        refLink.GetMap3().setLevel(3);
+        refLink.SetMap4(map);
+        refLink.GetMap4().setLevel(4);
         ///Construieste eroul
         hero = Hero.getInstance(refLink,0, 0);
         hero.SetX(map.spawnX()*Tile.TILE_WIDTH);
         hero.SetY(map.spawnY()*Tile.TILE_HEIGHT);
     }
-
-    public PlayState3(RefLinks refLink,String path)
+    public PlayState4(RefLinks refLink,String path)
     {
         ///Apel al constructorului clasei de baza
         super(refLink);
         ///Construieste harta jocului
-        map = new Map3(refLink,path);
+        map = new Map4(refLink,path);
         ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
-        refLink.SetMap3(map);
-        refLink.GetMap3().setLevel(3);
+        refLink.SetMap4(map);
+        refLink.GetMap4().setLevel(4);
         ///Construieste eroul
         hero = Hero.getInstance(refLink,0, 0);
         hero.SetX(map.spawnX()*Tile.TILE_WIDTH);

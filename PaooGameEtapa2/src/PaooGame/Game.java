@@ -1,11 +1,14 @@
 package PaooGame;
 
+import PaooGame.Database.Database;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
 import PaooGame.Input.KeyManager;
+import PaooGame.Maps.*;
 import PaooGame.States.*;
 import PaooGame.Tiles.Tile;
 
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
@@ -63,14 +66,25 @@ public class Game implements Runnable
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
 
         ///Available states
-    private State playState;            /*!< Referinta catre joc.*/
+    private State playState1;            /*!< Referinta catre joc1.*/
+    private State playState2;            /*!< Referinta catre joc2.*/
+    private State playState3;            /*!< Referinta catre joc3.*/
+    private State playState4;            /*!< Referinta catre joc4.*/
     private State menuState;            /*!< Referinta catre menu.*/
+    private State saveState;            /*!< Referinta catre meniul de salvare.*/
+    private State startState;            /*!< Referinta catre meniul de start.*/
     private State settingsState;        /*!< Referinta catre setari.*/
     private State aboutState;           /*!< Referinta catre about.*/
     private KeyManager keyManager;      /*!< Referinta catre obiectul care gestioneaza intrarile din partea utilizatorului.*/
     private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibile.*/
 
+    private String username="Marco";
+
+    public int levelsFinished=0;
+
     private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
+
+    Database dataBase; /*!< Referinta catre baza de date.*/
 
     /*! \fn public Game(String title, int width, int height)
         \brief Constructor de initializare al clasei Game.
@@ -112,12 +126,14 @@ public class Game implements Runnable
             ///Se construieste obiectul de tip shortcut ce va retine o serie de referinte catre elementele importante din program.
         refLink = new RefLinks(this);
             ///Definirea starilor programului
-        playState       = PlayState1.getInstance(refLink);
         menuState       = MenuState.getInstance(refLink);
         settingsState   = SettingsState.getInstance(refLink);
+        startState   = StartState.getInstance(refLink);
         aboutState      = AboutState.getInstance(refLink);
+        saveState       = SaveState.getInstance(refLink);
+        dataBase        = Database.getInstance(refLink);
             ///Seteaza starea implicita cu care va fi lansat programul in executie
-        State.SetState(playState);
+        State.SetState(startState);
     }
 
     /*! \fn public void run()
@@ -216,18 +232,165 @@ public class Game implements Runnable
 
         Metoda este declarata privat deoarece trebuie apelata doar in metoda run()
      */
-    private void Update()
-    {
-            ///Determina starea tastelor
+    private void Update() {
+        ///Determina starea tastelor
         keyManager.Update();
         ///Trebuie obtinuta starea curenta pentru care urmeaza a se actualiza starea, atentie trebuie sa fie diferita de null.
-        if(State.GetState() != null)
+        if (State.GetState() != null)
         {
-                ///Actualizez starea curenta a jocului daca exista.
+            if(State.GetState()==playState1 || State.GetState()==playState2 || State.GetState()==playState3 || State.GetState()==playState4)
+            {
+                State.incScor();
+            }
+            ///Actualizez starea curenta a jocului daca exista.
             State.GetState().Update();
+            if (refLink.GetKeyManager().esc && !refLink.GetKeyManager().escPressed)
+            {
+                System.out.println("esc apasat");
+                refLink.GetKeyManager().escPressed = true;
+                if (State.GetState() == playState1 || State.GetState() == playState2 || State.GetState() == playState3 || State.GetState()==playState4)
+                {
+                    State.SetState(menuState);
+                }
+                else
+                if(State.GetState()==menuState)
+                {
+                    State.SetState(State.getPreviousState());
+                }
+            }
+            else if (!refLink.GetKeyManager().esc)
+            {
+                refLink.GetKeyManager().escPressed = false;
+            }
+            if (refLink.GetKeyManager().enter && !refLink.GetKeyManager().enterPressed)
+            {
+                System.out.println("enter apasat");
+                refLink.GetKeyManager().enterPressed=true;
+                if(State.GetState()==startState)
+                {
+                    if (StartState.getCurrentOption() == 0) {
+                        //start
+                        // TO BE RE-DESIGNED AFTER ADDING DATABSE
+                            State.resetScore();
+                            Map.level=0;
+                            playState1=null;
+                            playState1=new PlayState1(refLink);
+                            Database.databaseNewGame();
+                            State.SetState(playState1);
+                    }
+                    if (StartState.getCurrentOption() == 1) {
+                        //highscores
+                        // TO BE IMPLEMENTED AFTER ADDING DATABASE
+                    }
+                    if (StartState.getCurrentOption() == 2) {
+                        //load save
+                        Database.DatabaseLoadGame();
+                        if(levelsFinished==0)
+                        {
+                            playState1=new PlayState1(refLink,"map.txt");
+                            State.SetState(playState1);
+                        }
+                        if(levelsFinished==1)
+                        {
+                            playState2=new PlayState2(refLink,"map.txt");
+                            State.SetState(playState2);
+                        }
+                        if(levelsFinished==2)
+                        {
+                            playState3=new PlayState3(refLink,"map.txt");
+                            State.SetState(playState3);
+                        }
+                        if(levelsFinished==3)
+                        {
+                            playState4=new PlayState4(refLink,"map.txt");
+                            State.SetState(playState4);
+                        }
+                    }
+                    if (StartState.getCurrentOption() == 5) {
+                        wnd.GetWndFrame().dispose();
+                        System.exit(0);
+                    }
+                }
+                else
+                if(State.GetState()==saveState)
+                {
+                    if(SaveState.getCurrentOption()==0)
+                    {
+                        //save score
+                        playState1=null;
+                        playState2=null;
+                        playState3=null;
+                        playState4=null;
+                        State.resetScore();
+                        refLink.GetKeyManager().enterPressed=true;
+                        State.SetState(menuState);
+                    }
+                    if (SaveState.getCurrentOption() == 1) {
+                        //exit without save
+                        wnd.GetWndFrame().dispose();
+                        System.exit(0);
+                    }
+                }
+                else
+                if (State.GetState()==menuState)
+                {
+                    if (MenuState.getCurrentOption() == 0) {
+                        //resume
+                        State.SetState(State.getPreviousState());
+                    }
+                    if (MenuState.getCurrentOption() == 1) {
+
+                        //save game
+                        Database.DatabaseSaveGame();
+                        playState1=null;
+                        playState2=null;
+                        playState3=null;
+                        playState4=null;
+                        State.resetScore();
+                        Map.level=0;
+                        State.SetState(startState);
+                    }
+                    if (MenuState.getCurrentOption() == 2) {
+                        //setari
+                    }
+                    if (MenuState.getCurrentOption() == 3) {
+                        //exit to main menu
+                        State.SetState(startState);
+                    }
+                }
+            }
+            else if (!refLink.GetKeyManager().enter)
+            {
+                refLink.GetKeyManager().enterPressed = false;
+            }
+            if(State.GetState() == playState1 && Map1.isOver())
+            {
+                playState2=null;
+                playState2=new PlayState2(refLink);
+                levelsFinished=1;
+                State.SetState(playState2);
+            }
+            if(State.GetState()==playState2 && Map2.isOver())
+            {
+                playState3=null;
+                playState3=new PlayState3(refLink);
+                levelsFinished=2;
+                State.SetState(playState3);
+            }
+            if(State.GetState()==playState3 && Map3.isOver())
+            {
+                playState4=null;
+                playState4=new PlayState4(refLink);
+                levelsFinished=3;
+                State.SetState(playState4);
+            }
+            if(State.GetState()==playState4 && Map4.isOver())
+            {
+                State.SetState(saveState);
+                ///to do: save state pentru scor la final, eventual pentru reluare la fiecare nivel in meniu
+            }
         }
     }
-
     /*! \fn private void Draw()
         \brief Deseneaza elementele grafice in fereastra coresponzator starilor actualizate ale elementelor.
 
@@ -297,6 +460,14 @@ public class Game implements Runnable
     public KeyManager GetKeyManager()
     {
         return keyManager;
+    }
+
+    public int getLevelsFinished()
+    {
+        return levelsFinished;
+    }
+    public void setLevelFinished(int levels) {
+        this.levelsFinished=levels;
     }
 }
 

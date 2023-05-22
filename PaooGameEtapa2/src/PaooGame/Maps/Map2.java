@@ -25,8 +25,10 @@ public class Map2 extends Map
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
     private int soilTileContor; /*!< Contor pentru numarul de tile-uri de tip pamant.*/
 
+    private static boolean over=false;
     private final Point spawnPoint = new Point();
     private int level = 2;
+    public Map2 map2ref;
     private State menuState;    /*!< Referinta catre menu.*/
 
     /*! \fn public Map(RefLinks refLink)
@@ -39,9 +41,23 @@ public class Map2 extends Map
         super(refLink);
         /// Retine referinta "shortcut".
         this.refLink = refLink;
-
+        over=false;
+        level=2;
         ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
         LoadWorld(level);
+        map2ref=this;
+    }
+
+    public Map2(RefLinks refLink,String path)
+    {
+        super(refLink);
+        /// Retine referinta "shortcut".
+        this.refLink = refLink;
+        over=false;
+        level=2;
+        ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
+        LoadWorld(path);
+        map2ref=this;
     }
 
     /*! \fn public  void Update()
@@ -58,11 +74,11 @@ public class Map2 extends Map
         {
             for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
             {
-                if(refLink.GetMap().GetTile(x,y).GetId()==5)
+                if(GetTile(x,y).GetId()==5)
                 {
                     if(x!=heroPosX_drp && x!=heroPosX_stg || y!=heroPosY_sus && y!=heroPosY_jos)
                     {
-                        refLink.GetMap().SetTile(x,y,Tile.seedTileSolid);
+                        SetTile(x,y,Tile.seedTileSolid);
                         soilTileContor--;
                     }
                 }
@@ -73,10 +89,18 @@ public class Map2 extends Map
                 GetTile((int)(refLink.GetHero().GetX()+ refLink.GetHero().getBoundX())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT) == Tile.finishTile &&
                 GetTile((int)(refLink.GetHero().GetX()+refLink.GetHero().getBoundX()+refLink.GetHero().getBoundWidth())/Tile.TILE_WIDTH,(int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY()+refLink.GetHero().getBoundHeight())/Tile.TILE_HEIGHT)==Tile.finishTile)
         {
-            refLink.GetHero().SetX(spawnPoint.x*Tile.TILE_HEIGHT);
-            refLink.GetHero().SetY(spawnPoint.y*Tile.TILE_HEIGHT);
-            State.SetState(PlayState3.getInstance(refLink));
+            over=true;
         }
+    }
+
+    public static boolean isOver()
+    {
+        return over;
+    }
+
+    public int getSoilTileContor()
+    {
+        return soilTileContor;
     }
 
     /*! \fn public void Draw(Graphics g)
@@ -84,12 +108,13 @@ public class Map2 extends Map
 
         \param g Contextl grafi in care se realizeaza desenarea.
      */
-    public void Draw(Graphics g, Hero player) {
-        int offsetX = (int) ((refLink.GetGame().GetWidth()-refLink.GetHero().GetWidth())/2 - player.GetX());
-        int offsetY = (int) ((refLink.GetGame().GetHeight()-refLink.GetHero().GetHeight())/2 - player.GetY());
+    public void Draw(Graphics g) {
+        int offsetX = (int) ((refLink.GetGame().GetWidth()-refLink.GetHero().GetWidth())/2 - refLink.GetHero().GetX());
+        int offsetY = (int) ((refLink.GetGame().GetHeight()-refLink.GetHero().GetHeight())/2 - refLink.GetHero().GetY());
         g.translate(offsetX, offsetY);
         for (int y =0; y < refLink.GetGame().GetHeight() / Tile.TILE_HEIGHT; y++) {
             for (int x = 0; x < refLink.GetGame().GetWidth() / Tile.TILE_WIDTH; x++) {
+                Tile.grassTile.Draw(g, (int) x * Tile.TILE_HEIGHT, (int) y * Tile.TILE_WIDTH);
                 GetTile(x, y).Draw(g, (int) x * Tile.TILE_HEIGHT, (int) y * Tile.TILE_WIDTH);
             }
         }
@@ -127,14 +152,36 @@ public class Map2 extends Map
             tiles[x][y]=a.GetId();
     }
 
-    /*! \fn private void LoadWorld()
-        \brief Functie de incarcare a hartii jocului.
-        Aici se poate genera sau incarca din fisier harta
-     */
-    private void LoadWorld(int level)
+    public void LoadWorld(int level)
     {
         try {
-            File inputFile = new File("res/maps/Map2.txt");
+            File inputFile = new File("res/maps/Map"+level+".txt");
+            Scanner scanner = new Scanner(inputFile);
+            if (scanner.hasNextInt())
+            {
+                height = scanner.nextInt();
+                width = scanner.nextInt();
+                tiles = new int[width][height];
+                soilTileContor = scanner.nextInt();
+                spawnPoint.setLocation(scanner.nextInt(), scanner.nextInt());
+                for(int y = 0; y < height; y++)
+                {
+                    for(int x = 0; x < width; x++)
+                    {
+                        tiles[x][y] = scanner.nextInt();
+                    }
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
+    }
+
+    private void LoadWorld(String path)
+    {
+        try {
+            File inputFile = new File(path);
             Scanner scanner = new Scanner(inputFile);
             if (scanner.hasNextInt())
             {
@@ -165,5 +212,19 @@ public class Map2 extends Map
     public int spawnY()
     {
         return spawnPoint.y;
+    }
+
+    public String mapToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<height;i++)
+        {
+            for(int j=0;j<width;j++)
+            {
+                sb.append(tiles[j][i]).append(" ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }
