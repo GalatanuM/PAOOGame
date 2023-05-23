@@ -21,7 +21,7 @@ public class SaveState extends State
         saveFont = new Font("Arial", Font.PLAIN,40);
         options = new Vector<>();
         options.add("Save your score");
-        options.add("Exit without saving");
+        options.add("Exit to main menu");
     }
 
     public static synchronized SaveState getInstance(RefLinks refLink)
@@ -80,11 +80,13 @@ public class SaveState extends State
 
         for(int i = 0; i < options.size(); ++i)
         {
+            int textwidht=(int)g.getFontMetrics().getStringBounds(options.get(i),g).getWidth();
+            int textheight=(int)g.getFontMetrics().getStringBounds(options.get(0),g).getHeight();
             if(currentOption == i)
                 g.setColor(Color.blue);
             else
                 g.setColor(Color.white);
-            g.drawString(options.get(i), refLink.GetWidth()/2 - 100,refLink.GetHeight()/2+i*40);
+            g.drawString(options.get(i), refLink.GetWidth()/2 - textwidht/2, refLink.GetHeight()/2-options.size()/2*textheight+i*textheight);
         }
     }
     public int midScreen(String s)

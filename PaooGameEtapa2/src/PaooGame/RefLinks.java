@@ -34,6 +34,7 @@ public class RefLinks
     public RefLinks(Game game)
     {
         this.game = game;
+        this.map=new Map(this);
         this.hero = Hero.getInstance(this,0, 0);
         this.database = Database.getInstance(this);
     }

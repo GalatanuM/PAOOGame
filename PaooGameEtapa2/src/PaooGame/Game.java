@@ -75,10 +75,11 @@ public class Game implements Runnable
     private State startState;            /*!< Referinta catre meniul de start.*/
     private State settingsState;        /*!< Referinta catre setari.*/
     private State aboutState;           /*!< Referinta catre about.*/
+    private State highscoreState;           /*!< Referinta catre about.*/
     private KeyManager keyManager;      /*!< Referinta catre obiectul care gestioneaza intrarile din partea utilizatorului.*/
-    private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibile.*/
 
-    private String username="Marco";
+    private Map map;
+    private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibile.*/
 
     public int levelsFinished=0;
 
@@ -132,6 +133,8 @@ public class Game implements Runnable
         aboutState      = AboutState.getInstance(refLink);
         saveState       = SaveState.getInstance(refLink);
         dataBase        = Database.getInstance(refLink);
+        highscoreState = HighscoreState.getInstance(refLink);
+        map             = new Map(refLink);
             ///Seteaza starea implicita cu care va fi lansat programul in executie
         State.SetState(startState);
     }
@@ -253,7 +256,7 @@ public class Game implements Runnable
                     State.SetState(menuState);
                 }
                 else
-                if(State.GetState()==menuState)
+                if(State.GetState()==menuState || State.GetState()==highscoreState || State.GetState()==aboutState || State.GetState()==settingsState)
                 {
                     State.SetState(State.getPreviousState());
                 }
@@ -275,36 +278,54 @@ public class Game implements Runnable
                             Map.level=0;
                             playState1=null;
                             playState1=new PlayState1(refLink);
-                            Database.databaseNewGame();
                             State.SetState(playState1);
                     }
                     if (StartState.getCurrentOption() == 1) {
                         //highscores
-                        // TO BE IMPLEMENTED AFTER ADDING DATABASE
+                        State.SetState(highscoreState);
                     }
                     if (StartState.getCurrentOption() == 2) {
                         //load save
                         Database.DatabaseLoadGame();
-                        if(levelsFinished==0)
+                        if(Database.isLoaded())
                         {
-                            playState1=new PlayState1(refLink,"map.txt");
+                            if(levelsFinished==0)
+                            {
+                                playState1=new PlayState1(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState1);
+                            }
+                            if(levelsFinished==1)
+                            {
+                                playState2=new PlayState2(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState2);
+                            }
+                            if(levelsFinished==2)
+                            {
+                                playState3=new PlayState3(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState3);
+                            }
+                            if(levelsFinished==3)
+                            {
+                                playState4=new PlayState4(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState4);
+                            }
+                        }
+                        else
+                        {
+                            playState1=null;
+                            playState1=new PlayState1(refLink);
+                            State.resetScore();
+                            Map.level=1;
                             State.SetState(playState1);
                         }
-                        if(levelsFinished==1)
-                        {
-                            playState2=new PlayState2(refLink,"map.txt");
-                            State.SetState(playState2);
-                        }
-                        if(levelsFinished==2)
-                        {
-                            playState3=new PlayState3(refLink,"map.txt");
-                            State.SetState(playState3);
-                        }
-                        if(levelsFinished==3)
-                        {
-                            playState4=new PlayState4(refLink,"map.txt");
-                            State.SetState(playState4);
-                        }
+                    }
+                    if (StartState.getCurrentOption() == 3) {
+                        //settings
+                        State.SetState(settingsState);
+                    }
+                    if (StartState.getCurrentOption() == 4) {
+                        //about
+                        State.SetState(aboutState);
                     }
                     if (StartState.getCurrentOption() == 5) {
                         wnd.GetWndFrame().dispose();
@@ -317,18 +338,25 @@ public class Game implements Runnable
                     if(SaveState.getCurrentOption()==0)
                     {
                         //save score
+                        Database.databaseSaveHighscore();
+                        Database.loadHighscores();
                         playState1=null;
                         playState2=null;
                         playState3=null;
                         playState4=null;
                         State.resetScore();
                         refLink.GetKeyManager().enterPressed=true;
-                        State.SetState(menuState);
+                        State.SetState(startState);
                     }
                     if (SaveState.getCurrentOption() == 1) {
                         //exit without save
-                        wnd.GetWndFrame().dispose();
-                        System.exit(0);
+                        playState1=null;
+                        playState2=null;
+                        playState3=null;
+                        playState4=null;
+                        State.resetScore();
+                        refLink.GetKeyManager().enterPressed=true;
+                        State.SetState(startState);
                     }
                 }
                 else
@@ -339,8 +367,39 @@ public class Game implements Runnable
                         State.SetState(State.getPreviousState());
                     }
                     if (MenuState.getCurrentOption() == 1) {
+                        //restart
+                        switch (levelsFinished)
+                        {
+                            case 0:
+                                State.setScor(State.getLastscor());
+                                playState1=null;
+                                playState1=new PlayState1(refLink);
+                                State.SetState(playState1);
+                                break;
+                            case 1:
+                                State.setScor(State.getLastscor());
+                                playState2=null;
+                                playState2=new PlayState2(refLink);
+                                State.SetState(playState2);
+                                break;
+                            case 2:
+                                State.setScor(State.getLastscor());
+                                playState3=null;
+                                playState3=new PlayState3(refLink);
+                                State.SetState(playState3);
+                                break;
+                            case 3:
+                                State.setScor(State.getLastscor());
+                                playState4=null;
+                                playState4=new PlayState4(refLink);
+                                State.SetState(playState4);
+                                break;
+                        }
+                    }
+                    if (MenuState.getCurrentOption() == 2) {
 
                         //save game
+                        Database.databaseNewGame();
                         Database.DatabaseSaveGame();
                         playState1=null;
                         playState2=null;
@@ -350,10 +409,11 @@ public class Game implements Runnable
                         Map.level=0;
                         State.SetState(startState);
                     }
-                    if (MenuState.getCurrentOption() == 2) {
-                        //setari
-                    }
                     if (MenuState.getCurrentOption() == 3) {
+                        //setari
+                        State.SetState(settingsState);
+                    }
+                    if (MenuState.getCurrentOption() == 4) {
                         //exit to main menu
                         State.SetState(startState);
                     }
@@ -369,6 +429,7 @@ public class Game implements Runnable
                 playState2=new PlayState2(refLink);
                 levelsFinished=1;
                 State.SetState(playState2);
+                State.setLastscor(State.getScor());
             }
             if(State.GetState()==playState2 && Map2.isOver())
             {
@@ -376,6 +437,7 @@ public class Game implements Runnable
                 playState3=new PlayState3(refLink);
                 levelsFinished=2;
                 State.SetState(playState3);
+                State.setLastscor(State.getScor());
             }
             if(State.GetState()==playState3 && Map3.isOver())
             {
@@ -383,11 +445,12 @@ public class Game implements Runnable
                 playState4=new PlayState4(refLink);
                 levelsFinished=3;
                 State.SetState(playState4);
+                State.setLastscor(State.getScor());
             }
             if(State.GetState()==playState4 && Map4.isOver())
             {
                 State.SetState(saveState);
-                ///to do: save state pentru scor la final, eventual pentru reluare la fiecare nivel in meniu
+                State.setLastscor(State.getScor());
             }
         }
     }

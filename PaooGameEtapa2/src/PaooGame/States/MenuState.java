@@ -20,6 +20,7 @@ public class MenuState extends State
         menuFont = new Font("Arial", Font.PLAIN,40);
         options = new Vector<>();
         options.add("Resume");
+        options.add("Restart");
         options.add("Save game");
         options.add("Settings");
         options.add("Exit");
@@ -81,6 +82,8 @@ public class MenuState extends State
 
         for(int i = 0; i < options.size(); ++i)
         {
+            int textwidht=(int)g.getFontMetrics().getStringBounds(options.get(i),g).getWidth();
+            int textheight=(int)g.getFontMetrics().getStringBounds(options.get(0),g).getHeight();
             if(currentOption == i)
                 g.setColor(Color.blue);
             else

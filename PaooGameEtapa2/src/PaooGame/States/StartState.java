@@ -83,11 +83,13 @@ public class StartState extends State
 
         for(int i = 0; i < options.size(); ++i)
         {
+            int textwidht=(int)g.getFontMetrics().getStringBounds(options.get(i),g).getWidth();
+            int textheight=(int)g.getFontMetrics().getStringBounds(options.get(0),g).getHeight();
             if(currentOption == i)
                 g.setColor(Color.blue);
             else
                 g.setColor(Color.white);
-            g.drawString(options.get(i), refLink.GetWidth()/2 - 100,refLink.GetHeight()/2+i*40);
+            g.drawString(options.get(i), refLink.GetWidth()/2 - textwidht/2,refLink.GetHeight()/2-textheight*options.size()/2+(i+1)*textheight);
         }
     }
     public int midScreen(String s)

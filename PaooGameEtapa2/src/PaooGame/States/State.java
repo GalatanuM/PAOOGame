@@ -18,6 +18,7 @@ public abstract class State
     protected RefLinks refLink;
 
     public static int scor=0;
+    public static int lastscor=0;
     public State(RefLinks refLink)
     {
         this.refLink = refLink;
@@ -51,6 +52,21 @@ public abstract class State
     public static void resetScore()
     {
         scor=0;
+    }
+
+    public static void setLastscor(int score)
+    {
+        lastscor=score;
+    }
+
+    public static int getLastscor()
+    {
+        return lastscor;
+    }
+
+    public static void setScor(int score)
+    {
+        scor = score;
     }
     public static void incScor()
     {

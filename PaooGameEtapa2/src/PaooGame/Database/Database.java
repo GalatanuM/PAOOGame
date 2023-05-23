@@ -5,19 +5,22 @@ import PaooGame.RefLinks;
 import PaooGame.States.State;
 import PaooGame.Tiles.Tile;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class Database {
-    static Connection c = null;
-    static Statement stmt = null;
-    static ResultSet rs = null;
+    private static Connection c = null;
+    private static Statement stmt = null;
+    private static ResultSet rs = null;
 
-    private static Database database=null;
+    private static Database database = null;
     private static int levelsFinished;
 
     private static RefLinks ref;
@@ -28,6 +31,9 @@ public class Database {
     private static float heroX;
     private static float heroY;
     private static int score;
+
+    private static boolean loaded = false;
+
 
     private Database(RefLinks ref) {
         try {
@@ -42,16 +48,14 @@ public class Database {
         System.out.println("Connected to database!");
     }
 
-    public static synchronized Database getInstance(RefLinks ref)
-    {
-        if(database == null)
-        {
+    public static synchronized Database getInstance(RefLinks ref) {
+        if (database == null) {
             database = new Database(ref);
         }
         return database;
     }
 
-    public static void databaseNewGame()  {
+    public static void databaseNewGame() {
         String sql = "CREATE TABLE IF NOT EXISTS Game (" +
                 "id INTEGER PRIMARY KEY, " +
                 "levelsFinished INTEGER," +
@@ -59,90 +63,85 @@ public class Database {
                 "HeroY REAL," +
                 "Score INTEGER" +
                 ");";
-        try{
-            stmt.execute("DROP TABLE IF EXISTS Game;");
+        try {
             stmt.execute(sql);
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private static boolean gameExists(){
-        try{
+    private static boolean gameExists() {
+        try {
             String sqlQuery = "SELECT 1 FROM Game LIMIT 1;";
             ResultSet resultSet = stmt.executeQuery(sqlQuery);
             return resultSet.getBoolean(1);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return false;
     }
 
-    public static void DatabaseSaveGame(){
+    public static void DatabaseSaveGame() {
         String sqlStatement;
-        if(gameExists()) {
+        if (gameExists()) {
             sqlStatement = "UPDATE Game SET levelsFinished = ?, Score = ?, HeroX = ?, HeroY = ?;";
-        }else {
+        } else {
             sqlStatement = "INSERT INTO Game(levelsFinished , Score , HeroX , HeroY) VALUES (?, ?, ?, ?);";
         }
         try {
             PreparedStatement pstmt = c.prepareStatement(sqlStatement);
             newLevelsFinished = ref.GetGame().levelsFinished;
-            newHeroX = ref.GetHero().GetX()+ref.GetHero().getBoundX();
-            newHeroY = ref.GetHero().GetY()+ref.GetHero().getBoundY();
+            newHeroX = ref.GetHero().GetX() + ref.GetHero().getBoundX();
+            newHeroY = ref.GetHero().GetY() + ref.GetHero().getBoundY();
             newScore = State.getScor();
-            if(newLevelsFinished==0)
-            {
+            if (newLevelsFinished == 0) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
                 writer.write("10 20");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap1().getSoilTileContor()));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroX/ Tile.TILE_WIDTH)));
+                writer.write(String.valueOf((int) (newHeroX / Tile.TILE_WIDTH)));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroY/ Tile.TILE_HEIGHT)));
+                writer.write(String.valueOf((int) (newHeroY / Tile.TILE_HEIGHT)));
                 writer.write("\n");
                 writer.write(ref.GetMap1().map1ref.mapToString());
                 writer.close();
             }
-            if(newLevelsFinished==1)
-            {
+            if (newLevelsFinished == 1) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
                 writer.write("10 20");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap2().getSoilTileContor()));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroX/ Tile.TILE_WIDTH)));
+                writer.write(String.valueOf((int) (newHeroX / Tile.TILE_WIDTH)));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroY/ Tile.TILE_HEIGHT)));
+                writer.write(String.valueOf((int) (newHeroY / Tile.TILE_HEIGHT)));
                 writer.write("\n");
                 writer.write(ref.GetMap2().map2ref.mapToString());
                 writer.close();
             }
-            if(newLevelsFinished==2)
-            {
+            if (newLevelsFinished == 2) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
                 writer.write("10 20");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap3().getSoilTileContor()));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroX/ Tile.TILE_WIDTH)));
+                writer.write(String.valueOf((int) (newHeroX / Tile.TILE_WIDTH)));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroY/ Tile.TILE_HEIGHT)));
+                writer.write(String.valueOf((int) (newHeroY / Tile.TILE_HEIGHT)));
                 writer.write("\n");
                 writer.write(ref.GetMap3().map3ref.mapToString());
                 writer.close();
             }
-            if(newLevelsFinished==3)
-            {
+            if (newLevelsFinished == 3) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
                 writer.write("10 20");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap4().getSoilTileContor()));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroX/ Tile.TILE_WIDTH)));
+                writer.write(String.valueOf((int) (newHeroX / Tile.TILE_WIDTH)));
                 writer.write(" ");
-                writer.write(String.valueOf((int)(newHeroY/ Tile.TILE_HEIGHT)));
+                writer.write(String.valueOf((int) (newHeroY / Tile.TILE_HEIGHT)));
                 writer.write("\n");
                 writer.write(ref.GetMap4().map4ref.mapToString());
                 writer.close();
@@ -160,9 +159,11 @@ public class Database {
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
     }
-    public static int getLevelsFinished(){
+
+    public static int getLevelsFinished() {
         return levelsFinished;
     }
+
     public static void DatabaseLoadGame() {
         try {
             if (gameExists()) {
@@ -175,13 +176,11 @@ public class Database {
                     score = rs.getInt("Score");
                     ref.GetHero().SetX(heroX);
                     ref.GetHero().SetY(heroY);
-                    State.scor=score;
+                    State.setScor(score);
                     ref.GetGame().setLevelFinished(levelsFinished);
-                    if(levelsFinished==0) ref.GetMap1().setLevel(levelsFinished);
-                    if(levelsFinished==1) ref.GetMap2().setLevel(levelsFinished);
-                    if(levelsFinished==2) ref.GetMap3().setLevel(levelsFinished);
-                    if(levelsFinished==3) ref.GetMap4().setLevel(levelsFinished);
+                    ref.GetMap().setLevel(levelsFinished);
                     System.out.println(heroX + " " + heroY + " " + score + " " + levelsFinished);
+                    loaded = true;
                     return;
                 }
             }
@@ -189,6 +188,64 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static void databaseCloseConnection() {
+        try {
+            stmt.close();
+            c.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void databaseSaveHighscore() {
+        String createTableSql = "CREATE TABLE IF NOT EXISTS Highscores (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "Score INTEGER" +
+                ");";
+
+        String insertSql = "INSERT INTO Highscores (Score) VALUES (?);";
+
+        try {
+            stmt.execute("DROP TABLE IF EXISTS Game;");
+            stmt.execute(createTableSql);
+            score = State.getScor() / 60;
+            PreparedStatement pstmt = c.prepareStatement(insertSql);
+            pstmt.setInt(1, score); // Assuming 'score' is the highscore value
+            pstmt.executeUpdate();
+
+            System.out.println("Highscore saved: " + score);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public static List<String> loadHighscores() {
+        String selectQuery = "SELECT Score FROM Highscores ORDER BY Score ASC LIMIT 10";
+        try {
+            c = DriverManager.getConnection("jdbc:sqlite:./src/PaooGame/Database/data_base.db");
+            stmt = c.createStatement();
+            ResultSet resultSet = stmt.executeQuery(selectQuery);
+            List<String> highscores = new ArrayList<>();
+
+            while (resultSet.next()) {
+                int score = resultSet.getInt("Score");
+                highscores.add(String.valueOf(score));
+            }
+
+            return highscores;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static boolean isLoaded()
+    {
+        return loaded;
     }
 }
 

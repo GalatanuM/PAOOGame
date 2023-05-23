@@ -20,6 +20,7 @@ public class Tile
     public static Tile mountainTile     = new MountainTile(1);  /*!< Dala de tip munte/piatra*/
     public static Tile waterTile        = new WaterTile(2);     /*!< Dala de tip apa*/
     public static Tile treeTile         = new TreeTile(3);      /*!< Dala de tip copac*/
+    public static Tile edgeTile         = new EdgeTile(8);      /*!< Dala de tip copac*/
     public static Tile soilTile         = new SoilTile(4);      /*!< Dala de tip sol/pamant*/
     public static Tile seedTile         = new SeedTile(5);      /*!< Dala de tip samanta*/
     public static Tile seedTileSolid         = new SeedTileSolid(6);      /*!< Dala de tip samanta*/
