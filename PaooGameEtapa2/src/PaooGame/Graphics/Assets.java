@@ -34,6 +34,7 @@ public class Assets
     public static BufferedImage heroDown3;
     public static BufferedImage tree;
     public static BufferedImage finish;
+    public static BufferedImage menuBackground;
 
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
@@ -45,7 +46,7 @@ public class Assets
     {
             /// Se creaza temporar un obiect SpriteSheet initializat prin intermediul clasei ImageLoader
         SpriteSheet sheet = new SpriteSheet(ImageLoader.LoadImage("/textures/PaooGameSpriteSheet.png"));
-
+        SpriteSheet menu = new SpriteSheet(ImageLoader.LoadImage("/textures/menubackground.png"));
             /// Se obtin subimaginile corespunzatoare elementelor necesare.
         grass = sheet.crop(0, 0);
         soil = sheet.crop(1, 0);
@@ -71,5 +72,6 @@ public class Assets
         heroUp2 = sheet.crop(3, 4);
         heroUp3 = sheet.crop(3, 5);
         finish = sheet.crop(1,1);
+        menuBackground = menu.crop(0,2,791,573);
     }
 }

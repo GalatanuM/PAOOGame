@@ -53,6 +53,10 @@ public abstract class State
     {
         scor=0;
     }
+    public static void resetLastScore()
+    {
+        lastscor=0;
+    }
 
     public static void setLastscor(int score)
     {

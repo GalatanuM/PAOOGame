@@ -1,5 +1,6 @@
 package PaooGame.States;
 
+import PaooGame.Graphics.Assets;
 import PaooGame.RefLinks;
 
 import java.awt.*;
@@ -12,12 +13,15 @@ public class MenuState extends State
     private static int currentOption = 0;
 
     private static MenuState menu = null;
+
+    private static Color brown;
     Font menuFont;
     Vector<String> options;
     private MenuState(RefLinks refLink)
     {
         super(refLink);
         menuFont = new Font("Arial", Font.PLAIN,40);
+        brown= new Color(139,69,19);
         options = new Vector<>();
         options.add("Resume");
         options.add("Restart");
@@ -73,21 +77,17 @@ public class MenuState extends State
     @Override
     public void Draw(Graphics g)
     {
-        g.setColor(Color.BLACK);
-        g.fillRect(0,0, refLink.GetWidth(), refLink.GetHeight());
-
+        g.drawImage(Assets.menuBackground,0,0,refLink.GetWidth(), refLink.GetHeight(), null);
         g.setFont(menuFont);
-        g.setColor(Color.white);
-        g.drawString("Option = " + currentOption,100,100);
 
         for(int i = 0; i < options.size(); ++i)
         {
             int textwidht=(int)g.getFontMetrics().getStringBounds(options.get(i),g).getWidth();
             int textheight=(int)g.getFontMetrics().getStringBounds(options.get(0),g).getHeight();
             if(currentOption == i)
-                g.setColor(Color.blue);
+                g.setColor(brown);
             else
-                g.setColor(Color.white);
+                g.setColor(Color.orange);
             g.drawString(options.get(i), refLink.GetWidth()/2 - 100,refLink.GetHeight()/2+i*40);
         }
     }

@@ -28,9 +28,11 @@ public class Database {
     private static float newHeroX;
     private static float newHeroY;
     private static int newScore;
+    private static int newLastScore;
     private static float heroX;
     private static float heroY;
     private static int score;
+    private static int lastscore;
 
     private static boolean loaded = false;
 
@@ -61,9 +63,11 @@ public class Database {
                 "levelsFinished INTEGER," +
                 "HeroX REAL," +
                 "HeroY REAL," +
-                "Score INTEGER" +
+                "Score INTEGER," +
+                "lastScore INTEGER" +
                 ");";
         try {
+            stmt.execute("DROP TABLE IF EXISTS Game;");
             stmt.execute(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -84,9 +88,9 @@ public class Database {
     public static void DatabaseSaveGame() {
         String sqlStatement;
         if (gameExists()) {
-            sqlStatement = "UPDATE Game SET levelsFinished = ?, Score = ?, HeroX = ?, HeroY = ?;";
+            sqlStatement = "UPDATE Game SET levelsFinished = ?, Score = ?, lastScore = ?, HeroX = ?, HeroY = ?;";
         } else {
-            sqlStatement = "INSERT INTO Game(levelsFinished , Score , HeroX , HeroY) VALUES (?, ?, ?, ?);";
+            sqlStatement = "INSERT INTO Game(levelsFinished , Score , lastScore , HeroX , HeroY) VALUES (?, ?, ?, ?, ?);";
         }
         try {
             PreparedStatement pstmt = c.prepareStatement(sqlStatement);
@@ -94,9 +98,10 @@ public class Database {
             newHeroX = ref.GetHero().GetX() + ref.GetHero().getBoundX();
             newHeroY = ref.GetHero().GetY() + ref.GetHero().getBoundY();
             newScore = State.getScor();
+            newLastScore = State.getLastscor();
             if (newLevelsFinished == 0) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
-                writer.write("10 20");
+                writer.write("40 40");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap1().getSoilTileContor()));
                 writer.write(" ");
@@ -109,7 +114,7 @@ public class Database {
             }
             if (newLevelsFinished == 1) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
-                writer.write("10 20");
+                writer.write("40 40");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap2().getSoilTileContor()));
                 writer.write(" ");
@@ -122,7 +127,7 @@ public class Database {
             }
             if (newLevelsFinished == 2) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
-                writer.write("10 20");
+                writer.write("40 40");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap3().getSoilTileContor()));
                 writer.write(" ");
@@ -135,7 +140,7 @@ public class Database {
             }
             if (newLevelsFinished == 3) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
-                writer.write("10 20");
+                writer.write("40 40");
                 writer.write(" ");
                 writer.write(String.valueOf(ref.GetMap4().getSoilTileContor()));
                 writer.write(" ");
@@ -146,11 +151,12 @@ public class Database {
                 writer.write(ref.GetMap4().map4ref.mapToString());
                 writer.close();
             }
-            System.out.println(newHeroX + " " + newHeroY + " " + newScore + " " + newLevelsFinished);
+            System.out.println(newHeroX + " " + newHeroY + " " + newScore + " " + newLastScore + " " + newLevelsFinished);
             pstmt.setInt(1, newLevelsFinished);
-            pstmt.setFloat(3, newHeroX);
-            pstmt.setFloat(4, newHeroY);
+            pstmt.setFloat(4, newHeroX);
+            pstmt.setFloat(5, newHeroY);
             pstmt.setInt(2, newScore);
+            pstmt.setInt(3, newLastScore);
             pstmt.executeUpdate();
             System.out.println("DB UPDATED");
         } catch (SQLException e) {
@@ -167,19 +173,21 @@ public class Database {
     public static void DatabaseLoadGame() {
         try {
             if (gameExists()) {
-                String selectQuery = "SELECT levelsFinished , Score , HeroX , HeroY FROM Game";
+                String selectQuery = "SELECT levelsFinished , Score , lastScore , HeroX , HeroY FROM Game";
                 rs = stmt.executeQuery(selectQuery);
                 while (rs.next()) {
                     levelsFinished = rs.getInt("levelsFinished");
                     heroX = rs.getFloat("HeroX");
                     heroY = rs.getFloat("HeroY");
                     score = rs.getInt("Score");
+                    lastscore = rs.getInt("lastScore");
                     ref.GetHero().SetX(heroX);
                     ref.GetHero().SetY(heroY);
                     State.setScor(score);
+                    State.setLastscor(lastscore);
                     ref.GetGame().setLevelFinished(levelsFinished);
                     ref.GetMap().setLevel(levelsFinished);
-                    System.out.println(heroX + " " + heroY + " " + score + " " + levelsFinished);
+                    System.out.println(heroX + " " + heroY + " " + score + " " + lastscore + " " + levelsFinished);
                     loaded = true;
                     return;
                 }
@@ -209,13 +217,11 @@ public class Database {
         String insertSql = "INSERT INTO Highscores (Score) VALUES (?);";
 
         try {
-            stmt.execute("DROP TABLE IF EXISTS Game;");
             stmt.execute(createTableSql);
             score = State.getScor() / 60;
             PreparedStatement pstmt = c.prepareStatement(insertSql);
             pstmt.setInt(1, score); // Assuming 'score' is the highscore value
             pstmt.executeUpdate();
-
             System.out.println("Highscore saved: " + score);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -230,12 +236,10 @@ public class Database {
             stmt = c.createStatement();
             ResultSet resultSet = stmt.executeQuery(selectQuery);
             List<String> highscores = new ArrayList<>();
-
             while (resultSet.next()) {
                 int score = resultSet.getInt("Score");
                 highscores.add(String.valueOf(score));
             }
-
             return highscores;
         } catch (SQLException e) {
             System.out.println(e.getMessage());

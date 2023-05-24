@@ -1,5 +1,6 @@
 package PaooGame.States;
 
+import PaooGame.Graphics.Assets;
 import PaooGame.RefLinks;
 
 import java.awt.*;
@@ -11,14 +12,21 @@ public class StartState extends State
     int t = 0;
     private static int currentOption = 0;
 
+    private static Color brown;
+
     private static StartState start = null;
     Font startFont;
+    Font startFont1;
+    Font startFont2;
     Vector<String> options;
     private StartState(RefLinks refLink)
     {
         super(refLink);
-        startFont = new Font("Arial", Font.PLAIN,40);
+        startFont = new Font("", Font.PLAIN,40);
+        startFont1 = new Font("", Font.PLAIN,60);
+        startFont2 = new Font("", Font.BOLD,60);
         options = new Vector<>();
+        brown= new Color(139,69,19);
         options.add("Start");
         options.add("Highscores");
         options.add("Load save");
@@ -74,21 +82,27 @@ public class StartState extends State
     @Override
     public void Draw(Graphics g)
     {
-        g.setColor(Color.BLACK);
-        g.fillRect(0,0, refLink.GetWidth(), refLink.GetHeight());
+        g.drawImage(Assets.menuBackground,0,0,refLink.GetWidth(), refLink.GetHeight(), null);
 
+        /*g.setColor(Color.BLACK);
+        g.fillRect(0,0, refLink.GetWidth(), refLink.GetHeight());*/
+
+        g.setFont(startFont1);
+        g.setColor(Color.black);
+        g.drawString("Aranara Flower Garden", refLink.GetWidth()/2 - 320+5,refLink.GetHeight()/2-265+5);
+        g.setFont(startFont1);
+        g.setColor(new Color(210,105,30));
+        g.drawString("Aranara Flower Garden", refLink.GetWidth()/2 - 320,refLink.GetHeight()/2-265);
         g.setFont(startFont);
-        g.setColor(Color.white);
-        g.drawString("Option = " + currentOption,100,100);
-
         for(int i = 0; i < options.size(); ++i)
         {
             int textwidht=(int)g.getFontMetrics().getStringBounds(options.get(i),g).getWidth();
             int textheight=(int)g.getFontMetrics().getStringBounds(options.get(0),g).getHeight();
             if(currentOption == i)
-                g.setColor(Color.blue);
+                g.setColor(brown);
             else
-                g.setColor(Color.white);
+                g.setColor(Color.orange);
+
             g.drawString(options.get(i), refLink.GetWidth()/2 - textwidht/2,refLink.GetHeight()/2-textheight*options.size()/2+(i+1)*textheight);
         }
     }

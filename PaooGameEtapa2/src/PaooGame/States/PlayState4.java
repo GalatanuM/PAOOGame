@@ -26,7 +26,7 @@ public class PlayState4 extends PlayState
         super(refLink);
         ///Construieste harta jocului
         map = new Map4(refLink);
-        ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
+
         refLink.SetMap4(map);
         refLink.GetMap4().setLevel(4);
         ///Construieste eroul
@@ -40,9 +40,9 @@ public class PlayState4 extends PlayState
         super(refLink);
         ///Construieste harta jocului
         map = new Map4(refLink,path);
-        ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
         refLink.SetMap4(map);
         refLink.GetMap4().setLevel(4);
+        refLink.GetGame().setLevelFinished(3);
         ///Construieste eroul
         hero = Hero.getInstance(refLink,0, 0);
         hero.SetX(map.spawnX()*Tile.TILE_WIDTH);

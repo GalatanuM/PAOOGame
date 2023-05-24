@@ -43,6 +43,7 @@ public class PlayState1 extends PlayState
         ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
         refLink.SetMap1(map);
         refLink.GetMap1().setLevel(1);
+        refLink.GetGame().setLevelFinished(0);
         ///Construieste eroul
         hero = Hero.getInstance(refLink,0, 0);
         hero.SetX(map.spawnX()*Tile.TILE_WIDTH);

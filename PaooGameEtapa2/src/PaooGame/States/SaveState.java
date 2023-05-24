@@ -1,6 +1,7 @@
 package PaooGame.States;
 
 import PaooGame.Database.Database;
+import PaooGame.Graphics.Assets;
 import PaooGame.RefLinks;
 
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.util.Vector;
 public class SaveState extends State
 {
     static int pressed = 0, hold = 0;
+    private static Color brown;
     int t = 0;
     private static int currentOption = 0;
 
@@ -19,6 +21,7 @@ public class SaveState extends State
     {
         super(refLink);
         saveFont = new Font("Arial", Font.PLAIN,40);
+        brown= new Color(139,69,19);
         options = new Vector<>();
         options.add("Save your score");
         options.add("Exit to main menu");
@@ -71,21 +74,17 @@ public class SaveState extends State
     @Override
     public void Draw(Graphics g)
     {
-        g.setColor(Color.BLACK);
-        g.fillRect(0,0, refLink.GetWidth(), refLink.GetHeight());
-
+        g.drawImage(Assets.menuBackground,0,0,refLink.GetWidth(), refLink.GetHeight(), null);
         g.setFont(saveFont);
-        g.setColor(Color.white);
-        g.drawString("Option = " + currentOption,100,100);
 
         for(int i = 0; i < options.size(); ++i)
         {
             int textwidht=(int)g.getFontMetrics().getStringBounds(options.get(i),g).getWidth();
             int textheight=(int)g.getFontMetrics().getStringBounds(options.get(0),g).getHeight();
             if(currentOption == i)
-                g.setColor(Color.blue);
+                g.setColor(brown);
             else
-                g.setColor(Color.white);
+                g.setColor(Color.orange);
             g.drawString(options.get(i), refLink.GetWidth()/2 - textwidht/2, refLink.GetHeight()/2-options.size()/2*textheight+i*textheight);
         }
     }

@@ -81,7 +81,7 @@ public class Game implements Runnable
     private Map map;
     private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibile.*/
 
-    public int levelsFinished=0;
+    public static int levelsFinished=0;
 
     private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
@@ -232,7 +232,6 @@ public class Game implements Runnable
 
     /*! \fn private void Update()
         \brief Actualizeaza starea elementelor din joc.
-
         Metoda este declarata privat deoarece trebuie apelata doar in metoda run()
      */
     private void Update() {
@@ -249,7 +248,7 @@ public class Game implements Runnable
             State.GetState().Update();
             if (refLink.GetKeyManager().esc && !refLink.GetKeyManager().escPressed)
             {
-                System.out.println("esc apasat");
+                System.out.println("Escape apasat");
                 refLink.GetKeyManager().escPressed = true;
                 if (State.GetState() == playState1 || State.GetState() == playState2 || State.GetState() == playState3 || State.GetState()==playState4)
                 {
@@ -273,11 +272,18 @@ public class Game implements Runnable
                 {
                     if (StartState.getCurrentOption() == 0) {
                         //start
-                        // TO BE RE-DESIGNED AFTER ADDING DATABSE
                             State.resetScore();
+                            State.resetLastScore();
                             Map.level=0;
+                            levelsFinished=0;
                             playState1=null;
                             playState1=new PlayState1(refLink);
+                            playState2=null;
+                            //playState2=new PlayState2(refLink);
+                            playState3=null;
+                            //playState3=new PlayState3(refLink);
+                            playState4=null;
+                            //playState4=new PlayState4(refLink);
                             State.SetState(playState1);
                     }
                     if (StartState.getCurrentOption() == 1) {
@@ -371,6 +377,7 @@ public class Game implements Runnable
                         switch (levelsFinished)
                         {
                             case 0:
+                            case 4:
                                 State.setScor(State.getLastscor());
                                 playState1=null;
                                 playState1=new PlayState1(refLink);
@@ -450,7 +457,6 @@ public class Game implements Runnable
             if(State.GetState()==playState4 && Map4.isOver())
             {
                 State.SetState(saveState);
-                State.setLastscor(State.getScor());
             }
         }
     }

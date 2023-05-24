@@ -9,6 +9,7 @@ import java.util.List;
 public class HighscoreState extends State
 {
     private static int currentOption = 0;
+    private static Color brown;
 
     private List<String> highscores;
     private static HighscoreState highscore = null;
@@ -17,6 +18,7 @@ public class HighscoreState extends State
     {
         super(refLink);
         saveFont = new Font("Arial", Font.PLAIN,40);
+        brown= new Color(139,69,19);
     }
 
     public static synchronized HighscoreState getInstance(RefLinks refLink)
@@ -38,7 +40,7 @@ public class HighscoreState extends State
         g.setColor(Color.BLACK);
         g.fillRect(0,0, refLink.GetWidth(), refLink.GetHeight());
         g.setFont(saveFont);
-        g.setColor(Color.white);
+        g.setColor(Color.orange);
         highscores=Database.loadHighscores();
 
         if(highscores!=null)

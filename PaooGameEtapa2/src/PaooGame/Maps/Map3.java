@@ -19,8 +19,6 @@ import java.util.Scanner;
 public class Map3 extends Map
 {
     private RefLinks refLink;   /*!< O referinte catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.*/
-    private int width;          /*!< Latimea hartii in numar de dale.*/
-    private int height;         /*!< Inaltimea hartii in numar de dale.*/
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
     private int soilTileContor; /*!< Contor pentru numarul de tile-uri de tip pamant.*/
 
@@ -69,9 +67,9 @@ public class Map3 extends Map
 
         int heroPosY_sus = (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY())/Tile.TILE_HEIGHT;
         int heroPosY_jos = (int)(refLink.GetHero().GetY()+ refLink.GetHero().getBoundY()+refLink.GetHero().getBoundHeight())/Tile.TILE_HEIGHT;
-        for(int y = 0; y < refLink.GetGame().GetHeight()/Tile.TILE_HEIGHT; y++)
+        for(int y = 0; y < width; y++)
         {
-            for(int x = 0; x < refLink.GetGame().GetWidth()/Tile.TILE_WIDTH; x++)
+            for(int x = 0; x < height; x++)
             {
                 if(GetTile(x,y).GetId()==5)
                 {
@@ -111,8 +109,8 @@ public class Map3 extends Map
         int offsetX = (int) ((refLink.GetGame().GetWidth()-refLink.GetHero().GetWidth())/2 - refLink.GetHero().GetX());
         int offsetY = (int) ((refLink.GetGame().GetHeight()-refLink.GetHero().GetHeight())/2 - refLink.GetHero().GetY());
         g.translate(offsetX, offsetY);
-        for (int y =0; y < refLink.GetGame().GetHeight() / Tile.TILE_HEIGHT; y++) {
-            for (int x = 0; x < refLink.GetGame().GetWidth() / Tile.TILE_WIDTH; x++) {
+        for (int y =0; y < width; y++) {
+            for (int x = 0; x < height; x++) {
                 Tile.grassTile.Draw(g, (int) x * Tile.TILE_HEIGHT, (int) y * Tile.TILE_WIDTH);
                 GetTile(x, y).Draw(g, (int) x * Tile.TILE_HEIGHT, (int) y * Tile.TILE_WIDTH);
             }

@@ -18,8 +18,8 @@ import java.util.Scanner;
 public class Map
 {
     private RefLinks refLink;   /*!< O referinte catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.*/
-    private int width;          /*!< Latimea hartii in numar de dale.*/
-    private int height;         /*!< Inaltimea hartii in numar de dale.*/
+    static protected int width;          /*!< Latimea hartii in numar de dale.*/
+    static protected int height;         /*!< Inaltimea hartii in numar de dale.*/
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
     public static int level = 0;
 
@@ -32,6 +32,8 @@ public class Map
     {
             /// Retine referinta "shortcut".
         this.refLink = refLink;
+        //width=40;
+        //height=40;
     }
 
 
@@ -91,5 +93,14 @@ public class Map
     public void setLevel(int l)
     {
         level=l;
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+    public int getHeight()
+    {
+        return height;
     }
 }

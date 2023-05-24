@@ -108,7 +108,7 @@ public class Hero extends Character
         {
             if (xMove < 0 && x+xMove > -normalBounds.x) //la stanga
                 x += xMove;
-            if (xMove > 0 && x+xMove < refLink.GetGame().GetWidth() - normalBounds.width - normalBounds.x) //la dreapta
+            if (xMove > 0 && x+xMove < refLink.GetMap().getWidth()*Tile.TILE_WIDTH - normalBounds.width - normalBounds.x) //la dreapta
                 x += xMove;
         }
     }
@@ -143,7 +143,7 @@ public class Hero extends Character
         {
             if (yMove < 0 && y+yMove > -normalBounds.y)
                 y += yMove;
-            if (yMove > 0 && y+yMove < refLink.GetGame().GetHeight() - normalBounds.height - normalBounds.y)
+            if (yMove > 0 && y+yMove < refLink.GetMap().getHeight()*Tile.TILE_HEIGHT - normalBounds.height - normalBounds.y)
                 y += yMove;
         }
     }
