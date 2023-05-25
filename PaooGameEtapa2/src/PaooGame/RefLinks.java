@@ -81,16 +81,6 @@ public class RefLinks
 
     public Database getDatabase(){return database;}
 
-    /*! \fn public void SetGame(Game game)
-        \brief Seteaza referinta catre un obiect Game.
-
-        \param game Referinta obiectului Game.
-     */
-    public void SetGame(Game game)
-    {
-        this.game = game;
-    }
-
     /*! \fn public Map GetMap()
         \brief Intoarce referinta catre harta curenta.
      */

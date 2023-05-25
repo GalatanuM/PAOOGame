@@ -2,14 +2,11 @@ package PaooGame.States;
 import PaooGame.Database.Database;
 import PaooGame.RefLinks;
 
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.List;
 
 public class HighscoreState extends State
 {
-    private static int currentOption = 0;
-    private static Color brown;
 
     private List<String> highscores;
     private static HighscoreState highscore = null;
@@ -18,7 +15,6 @@ public class HighscoreState extends State
     {
         super(refLink);
         saveFont = new Font("Arial", Font.PLAIN,40);
-        brown= new Color(139,69,19);
     }
 
     public static synchronized HighscoreState getInstance(RefLinks refLink)

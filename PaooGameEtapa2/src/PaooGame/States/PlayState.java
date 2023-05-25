@@ -3,7 +3,6 @@ package PaooGame.States;
 import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
 import PaooGame.Maps.Map;
-import PaooGame.Tiles.Tile;
 
 import java.awt.*;
 

@@ -22,7 +22,6 @@ public class Assets
     public static BufferedImage seed;
     public static BufferedImage grass;
     public static BufferedImage mountain;
-    public static BufferedImage townGrass;
     public static BufferedImage water;
     public static BufferedImage heroUp;
     public static BufferedImage heroUp1;
@@ -50,7 +49,6 @@ public class Assets
             /// Se obtin subimaginile corespunzatoare elementelor necesare.
         grass = sheet.crop(0, 0);
         soil = sheet.crop(1, 0);
-        townGrass = sheet.crop(2, 0);
         mountain = sheet.crop(3, 0);
         water = sheet.crop(4, 0);
         tree = sheet.crop(5,0);

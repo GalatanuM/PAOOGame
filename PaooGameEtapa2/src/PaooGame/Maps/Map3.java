@@ -1,11 +1,6 @@
 package PaooGame.Maps;
 
-import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
-import PaooGame.States.MenuState;
-import PaooGame.States.PlayState1;
-import PaooGame.States.State;
-import PaooGame.Tiles.GrassTile;
 import PaooGame.Tiles.Tile;
 
 import java.awt.*;
@@ -26,7 +21,6 @@ public class Map3 extends Map
     public Map3 map3ref;
 
     private final Point spawnPoint = new Point();
-    private State menuState;    /*!< Referinta catre menu.*/
 
     /*! \fn public Map(RefLinks refLink)
         \brief Constructorul de initializare al clasei.

@@ -1,18 +1,14 @@
 package PaooGame.Database;
 
-import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
 import PaooGame.States.State;
 import PaooGame.Tiles.Tile;
 
-import javax.xml.crypto.Data;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class Database {

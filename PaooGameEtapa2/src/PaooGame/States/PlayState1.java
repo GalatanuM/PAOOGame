@@ -3,7 +3,6 @@ package PaooGame.States;
 import PaooGame.Items.Hero;
 import PaooGame.Maps.Map1;
 import PaooGame.RefLinks;
-import PaooGame.Maps.Map;
 import PaooGame.Tiles.Tile;
 
 import java.awt.*;
@@ -74,7 +73,7 @@ public class PlayState1 extends PlayState
         g.setColor(Color.orange);
         g.drawString("Target time: " + targetscor/60,(int)refLink.GetHero().GetX()-refLink.GetGame().GetWidth()/2 +50,(int)refLink.GetHero().GetY()-refLink.GetGame().GetHeight()/2+70);
         g.drawString("Initial time: " + lastscor/60,(int)refLink.GetHero().GetX()-refLink.GetGame().GetWidth()/2 +50,(int)refLink.GetHero().GetY()-refLink.GetGame().GetHeight()/2+110);
-        g.drawString("Actual ime: " + scor/60,(int)refLink.GetHero().GetX()-refLink.GetGame().GetWidth()/2 +50,(int)refLink.GetHero().GetY()-refLink.GetGame().GetHeight()/2+150);
+        g.drawString("Current time: " + scor/60,(int)refLink.GetHero().GetX()-refLink.GetGame().GetWidth()/2 +50,(int)refLink.GetHero().GetY()-refLink.GetGame().GetHeight()/2+150);
         //System.out.println((int)refLink.GetHero().GetX()+ " " +(int)refLink.GetHero().GetY());
     }
 }

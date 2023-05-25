@@ -1,10 +1,8 @@
 package PaooGame.Maps;
 
-import PaooGame.Database.Database;
 import PaooGame.RefLinks;
 import PaooGame.Tiles.Tile;
 
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -150,7 +148,7 @@ public class Map1 extends Map
     private void LoadWorld(int level)
     {
         try {
-            File inputFile = new File("res/maps/Map1.txt");
+            File inputFile = new File("res/maps/Map"+level+".txt");
             Scanner scanner = new Scanner(inputFile);
             if (scanner.hasNextInt())
             {

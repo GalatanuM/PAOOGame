@@ -23,9 +23,6 @@ public class Hero extends Character
     private static Hero hero = null;
     private int animatie;
 
-    private final int screenX;
-    private final int screenY;
-
     /*! \fn private Hero(RefLinks refLink, float x, float y)
         \brief Constructorul de initializare al clasei Hero.
 
@@ -45,18 +42,6 @@ public class Hero extends Character
         normalBounds.y = 16;
         normalBounds.width = 16;
         normalBounds.height = 24;
-
-        screenX = (refLink.GetWidth() - Character.DEFAULT_CREATURE_WIDTH)/2;
-        screenY = (refLink.GetHeight() - Character.DEFAULT_CREATURE_HEIGHT)/2;
-    }
-
-    public int getScreenX()
-    {
-        return screenX;
-    }
-    public int getScreenY()
-    {
-        return screenY;
     }
 
     public static synchronized Hero getInstance(RefLinks refLink, float x, float y)
@@ -550,7 +535,7 @@ public class Hero extends Character
         g.drawImage(image, (int)x, (int)y, width, height, null);
 
             ///doar pentru debug daca se doreste vizualizarea dreptunghiului de coliziune altfel se vor comenta urmatoarele doua linii
-        g.setColor(Color.blue);
-        g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
+        //g.setColor(Color.blue);
+        //g.fillRect((int)(x + bounds.x), (int)(y + bounds.y), bounds.width, bounds.height);
     }
 }

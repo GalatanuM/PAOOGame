@@ -30,7 +30,7 @@ public class StartState extends State
         options.add("Start game");
         options.add("Highscores");
         options.add("Load game");
-        options.add("Dificulty");
+        options.add("Difficulty");
         options.add("About");
         options.add("Exit");
     }

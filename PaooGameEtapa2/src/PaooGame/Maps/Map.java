@@ -1,25 +1,18 @@
 package PaooGame.Maps;
 
-import PaooGame.Items.Hero;
 import PaooGame.RefLinks;
-import PaooGame.States.MenuState;
-import PaooGame.States.State;
-import PaooGame.Tiles.GrassTile;
 import PaooGame.Tiles.Tile;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 /*! \class public class Map
     \brief Implementeaza notiunea de harta a jocului.
  */
 public class Map
 {
-    private RefLinks refLink;   /*!< O referinte catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.*/
     static protected int width;          /*!< Latimea hartii in numar de dale.*/
     static protected int height;         /*!< Inaltimea hartii in numar de dale.*/
+    private final RefLinks refLink;
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
     public static int level = 0;
 

@@ -7,11 +7,8 @@ import PaooGame.Input.KeyManager;
 import PaooGame.Maps.*;
 import PaooGame.States.*;
 import PaooGame.Tiles.Tile;
-
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.Set;
 
 /*! \class Game
     \brief Clasa principala a intregului proiect. Implementeaza Game - Loop (Update -> Draw)
@@ -83,8 +80,6 @@ public class Game implements Runnable
     private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibile.*/
 
     public static int levelsFinished=0;
-
-    private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
     Database dataBase; /*!< Referinta catre baza de date.*/
 
@@ -556,10 +551,6 @@ public class Game implements Runnable
         return keyManager;
     }
 
-    public int getLevelsFinished()
-    {
-        return levelsFinished;
-    }
     public void setLevelFinished(int levels) {
         this.levelsFinished=levels;
     }

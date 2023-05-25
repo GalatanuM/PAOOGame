@@ -1,8 +1,6 @@
 package PaooGame.Tiles;
 
 import PaooGame.Graphics.Assets;
-import PaooGame.Items.Hero;
-import PaooGame.RefLinks;
 
 /*! \class public class SeedTile extends Tile
     \brief Abstractizeaza notiunea de dala de tip samanta.

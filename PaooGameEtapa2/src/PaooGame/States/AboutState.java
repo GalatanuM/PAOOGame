@@ -1,6 +1,5 @@
 package PaooGame.States;
 
-import PaooGame.Database.Database;
 import PaooGame.RefLinks;
 
 import java.awt.*;
