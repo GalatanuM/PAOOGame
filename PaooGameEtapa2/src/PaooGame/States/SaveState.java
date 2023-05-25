@@ -88,12 +88,12 @@ public class SaveState extends State
             g.drawString(options.get(i), refLink.GetWidth()/2 - textwidht/2, refLink.GetHeight()/2-options.size()/2*textheight+i*textheight);
         }
     }
-    public int midScreen(String s)
-    {
-        return refLink.GetWidth()/2 - saveFont.getSize() * s.length()/2;
-    }
     public static int getCurrentOption()
     {
         return currentOption;
+    }
+    public static void resetCurrentOption()
+    {
+        currentOption=0;
     }
 }

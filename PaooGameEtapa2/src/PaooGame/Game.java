@@ -11,6 +11,7 @@ import PaooGame.Tiles.Tile;
 import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Set;
 
 /*! \class Game
     \brief Clasa principala a intregului proiect. Implementeaza Game - Loop (Update -> Draw)
@@ -243,6 +244,7 @@ public class Game implements Runnable
             if(State.GetState()==playState1 || State.GetState()==playState2 || State.GetState()==playState3 || State.GetState()==playState4)
             {
                 State.incScor();
+                if(!State.checkScore())State.SetState(startState);
             }
             ///Actualizez starea curenta a jocului daca exista.
             State.GetState().Update();
@@ -337,6 +339,7 @@ public class Game implements Runnable
                         wnd.GetWndFrame().dispose();
                         System.exit(0);
                     }
+                    StartState.resetCurrentOption();
                 }
                 else
                 if(State.GetState()==saveState)
@@ -364,6 +367,7 @@ public class Game implements Runnable
                         refLink.GetKeyManager().enterPressed=true;
                         State.SetState(startState);
                     }
+                    SaveState.resetCurrentOption();
                 }
                 else
                 if (State.GetState()==menuState)
@@ -417,13 +421,34 @@ public class Game implements Runnable
                         State.SetState(startState);
                     }
                     if (MenuState.getCurrentOption() == 3) {
-                        //setari
-                        State.SetState(settingsState);
-                    }
-                    if (MenuState.getCurrentOption() == 4) {
                         //exit to main menu
                         State.SetState(startState);
                     }
+                    MenuState.resetCurrentOption();
+                }
+                else
+                if(State.GetState()==settingsState)
+                {
+                    if(SettingsState.getCurrentOption()==0)
+                    {
+                        State.SetState(startState);
+                    }
+                    if(SettingsState.getCurrentOption()==1)
+                    {
+                        SettingsState.setDificulty(0);
+                        State.SetState(startState);
+                    }
+                    if(SettingsState.getCurrentOption()==2)
+                    {
+                        SettingsState.setDificulty(1);
+                        State.SetState(startState);
+                    }
+                    if(SettingsState.getCurrentOption()==3)
+                    {
+                        SettingsState.setDificulty(2);
+                        State.SetState(startState);
+                    }
+                    SettingsState.resetCurrentOption();
                 }
             }
             else if (!refLink.GetKeyManager().enter)

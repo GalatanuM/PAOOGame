@@ -27,10 +27,10 @@ public class StartState extends State
         startFont2 = new Font("", Font.BOLD,60);
         options = new Vector<>();
         brown= new Color(139,69,19);
-        options.add("Start");
+        options.add("Start game");
         options.add("Highscores");
-        options.add("Load save");
-        options.add("Settings");
+        options.add("Load game");
+        options.add("Dificulty");
         options.add("About");
         options.add("Exit");
     }
@@ -106,12 +106,12 @@ public class StartState extends State
             g.drawString(options.get(i), refLink.GetWidth()/2 - textwidht/2,refLink.GetHeight()/2-textheight*options.size()/2+(i+1)*textheight);
         }
     }
-    public int midScreen(String s)
-    {
-        return refLink.GetWidth()/2 - startFont.getSize() * s.length()/2;
-    }
     public static int getCurrentOption()
     {
         return currentOption;
+    }
+    public static void resetCurrentOption()
+    {
+        currentOption=0;
     }
 }

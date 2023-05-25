@@ -24,15 +24,7 @@ public class Database {
     private static int levelsFinished;
 
     private static RefLinks ref;
-    private static int newLevelsFinished;
-    private static float newHeroX;
-    private static float newHeroY;
-    private static int newScore;
-    private static int newLastScore;
-    private static float heroX;
-    private static float heroY;
     private static int score;
-    private static int lastscore;
 
     private static boolean loaded = false;
 
@@ -64,7 +56,8 @@ public class Database {
                 "HeroX REAL," +
                 "HeroY REAL," +
                 "Score INTEGER," +
-                "lastScore INTEGER" +
+                "lastScore INTEGER," +
+                "targetScore INTEGER" +
                 ");";
         try {
             stmt.execute("DROP TABLE IF EXISTS Game;");
@@ -88,17 +81,18 @@ public class Database {
     public static void DatabaseSaveGame() {
         String sqlStatement;
         if (gameExists()) {
-            sqlStatement = "UPDATE Game SET levelsFinished = ?, Score = ?, lastScore = ?, HeroX = ?, HeroY = ?;";
+            sqlStatement = "UPDATE Game SET levelsFinished = ?, Score = ?, lastScore = ?, targetScore = ?, HeroX = ?, HeroY = ?;";
         } else {
-            sqlStatement = "INSERT INTO Game(levelsFinished , Score , lastScore , HeroX , HeroY) VALUES (?, ?, ?, ?, ?);";
+            sqlStatement = "INSERT INTO Game(levelsFinished , Score , lastScore , targetScore , HeroX , HeroY) VALUES (?, ?, ?, ?, ?, ?);";
         }
         try {
             PreparedStatement pstmt = c.prepareStatement(sqlStatement);
-            newLevelsFinished = ref.GetGame().levelsFinished;
-            newHeroX = ref.GetHero().GetX() + ref.GetHero().getBoundX();
-            newHeroY = ref.GetHero().GetY() + ref.GetHero().getBoundY();
-            newScore = State.getScor();
-            newLastScore = State.getLastscor();
+            int newLevelsFinished = ref.GetGame().levelsFinished;
+            float newHeroX = ref.GetHero().GetX() + ref.GetHero().getBoundX();
+            float newHeroY = ref.GetHero().GetY() + ref.GetHero().getBoundY();
+            int newScore = State.getScor();
+            int newLastScore = State.getLastscor();
+            int newTargetScore = State.getTargetscor();
             if (newLevelsFinished == 0) {
                 FileWriter writer = new FileWriter("./src/PaooGame/Database/map.txt");
                 writer.write("40 40");
@@ -151,12 +145,13 @@ public class Database {
                 writer.write(ref.GetMap4().map4ref.mapToString());
                 writer.close();
             }
-            System.out.println(newHeroX + " " + newHeroY + " " + newScore + " " + newLastScore + " " + newLevelsFinished);
+            System.out.println(newHeroX + " " + newHeroY + " " + newScore + " " + newLastScore + " " + newTargetScore + " " + newLevelsFinished);
             pstmt.setInt(1, newLevelsFinished);
-            pstmt.setFloat(4, newHeroX);
-            pstmt.setFloat(5, newHeroY);
+            pstmt.setFloat(5, newHeroX);
+            pstmt.setFloat(6, newHeroY);
             pstmt.setInt(2, newScore);
             pstmt.setInt(3, newLastScore);
+            pstmt.setInt(4, newTargetScore);
             pstmt.executeUpdate();
             System.out.println("DB UPDATED");
         } catch (SQLException e) {
@@ -173,21 +168,23 @@ public class Database {
     public static void DatabaseLoadGame() {
         try {
             if (gameExists()) {
-                String selectQuery = "SELECT levelsFinished , Score , lastScore , HeroX , HeroY FROM Game";
+                String selectQuery = "SELECT levelsFinished , Score , lastScore , targetScore , HeroX , HeroY FROM Game";
                 rs = stmt.executeQuery(selectQuery);
                 while (rs.next()) {
                     levelsFinished = rs.getInt("levelsFinished");
-                    heroX = rs.getFloat("HeroX");
-                    heroY = rs.getFloat("HeroY");
+                    float heroX = rs.getFloat("HeroX");
+                    float heroY = rs.getFloat("HeroY");
                     score = rs.getInt("Score");
-                    lastscore = rs.getInt("lastScore");
+                    int lastscore = rs.getInt("lastScore");
+                    int targetscore = rs.getInt("targetScore");
                     ref.GetHero().SetX(heroX);
                     ref.GetHero().SetY(heroY);
                     State.setScor(score);
                     State.setLastscor(lastscore);
+                    State.setTargetscor(targetscore);
                     ref.GetGame().setLevelFinished(levelsFinished);
                     ref.GetMap().setLevel(levelsFinished);
-                    System.out.println(heroX + " " + heroY + " " + score + " " + lastscore + " " + levelsFinished);
+                    System.out.println(heroX + " " + heroY + " " + score + " " + lastscore + " " + targetscore + " " + levelsFinished);
                     loaded = true;
                     return;
                 }

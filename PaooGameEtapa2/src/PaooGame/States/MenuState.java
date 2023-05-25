@@ -24,10 +24,9 @@ public class MenuState extends State
         brown= new Color(139,69,19);
         options = new Vector<>();
         options.add("Resume");
-        options.add("Restart");
-        options.add("Save game");
-        options.add("Settings");
-        options.add("Exit");
+        options.add("Restart level");
+        options.add("Save game state");
+        options.add("Exit to menu");
     }
 
     public static synchronized MenuState getInstance(RefLinks refLink)
@@ -88,15 +87,17 @@ public class MenuState extends State
                 g.setColor(brown);
             else
                 g.setColor(Color.orange);
-            g.drawString(options.get(i), refLink.GetWidth()/2 - 100,refLink.GetHeight()/2+i*40);
+
+            g.drawString(options.get(i), refLink.GetWidth()/2 - textwidht/2,refLink.GetHeight()/2-textheight*options.size()/2+(i+1)*textheight);
         }
-    }
-    public int midScreen(String s)
-    {
-        return refLink.GetWidth()/2 - menuFont.getSize() * s.length()/2;
     }
     public static int getCurrentOption()
     {
         return currentOption;
+    }
+
+    public static void resetCurrentOption()
+    {
+        currentOption=0;
     }
 }
