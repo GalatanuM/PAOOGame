@@ -14,7 +14,6 @@ public class PlayState extends State
     private Hero hero;  /*!< Referinta catre obiectul animat erou (controlat de utilizator).*/
     private Map map;    /*!< Referinta catre harta curenta.*/
 
-
     /*! \fn public PlayState(RefLinks refLink)
         \brief Constructorul de initializare al clasei
 

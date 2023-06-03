@@ -213,7 +213,7 @@ public class Database {
             stmt.execute(createTableSql);
             score = State.getScor() / 60;
             PreparedStatement pstmt = c.prepareStatement(insertSql);
-            pstmt.setInt(1, score); // Assuming 'score' is the highscore value
+            pstmt.setInt(1, score);
             pstmt.executeUpdate();
             System.out.println("Highscore saved: " + score);
         } catch (SQLException e) {
