@@ -16,6 +16,12 @@ public abstract class State
     private static State previousState  = null; /*!< Referinta catre starea anterioara a jocului.*/
     private static State currentState   = null; /*!< Referinta catre starea curenta a jocului: game, meniu, settings, about etc.*/
     protected RefLinks refLink;
+
+    public static int scor=0;
+    public static int lastscor=0;
+    public static int targetscor=2700;
+
+    public static int dificulty=1;
     public State(RefLinks refLink)
     {
         this.refLink = refLink;
@@ -41,4 +47,61 @@ public abstract class State
     public abstract void Update();
         ///Metoda abstracta destinata desenarii starii curente
     public abstract void Draw(Graphics g);
+
+    public static State getPreviousState()
+    {
+        return previousState;
+    }
+    public static void resetScore()
+    {
+        scor=0;
+    }
+    public static void resetLastScore()
+    {
+        lastscor=0;
+    }
+
+    public static void setLastscor(int score)
+    {
+        lastscor=score;
+    }
+
+    public static int getLastscor()
+    {
+        return lastscor;
+    }
+    public static int getTargetscor()
+    {
+        return targetscor;
+    }
+
+    public static void setScor(int score)
+    {
+        scor = score;
+    }
+    public static void setDificulty(int dif)
+    {
+        dificulty=dif;
+        setTargetscor(dif);
+    }
+    public static void setTargetscor(int dif)
+    {
+        switch (dif)
+        {
+            case 0: targetscor=3600; break;
+            case 1: targetscor=2700; break;
+            case 2: targetscor=1800; break;
+            default: targetscor=dif; break;
+        }
+    }
+    public static void incScor()
+    {
+        scor++;
+    }
+    public static int getScor(){return scor;}
+    public static boolean checkScore()
+    {
+        if(scor<targetscor) return true;
+        return false;
+    }
 }

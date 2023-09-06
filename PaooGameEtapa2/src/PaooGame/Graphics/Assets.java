@@ -19,9 +19,9 @@ public class Assets
     public static BufferedImage heroRight2;
     public static BufferedImage heroRight3;
     public static BufferedImage soil;
+    public static BufferedImage seed;
     public static BufferedImage grass;
     public static BufferedImage mountain;
-    public static BufferedImage townGrass;
     public static BufferedImage water;
     public static BufferedImage heroUp;
     public static BufferedImage heroUp1;
@@ -32,6 +32,8 @@ public class Assets
     public static BufferedImage heroDown2;
     public static BufferedImage heroDown3;
     public static BufferedImage tree;
+    public static BufferedImage finish;
+    public static BufferedImage menuBackground;
 
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
@@ -43,14 +45,14 @@ public class Assets
     {
             /// Se creaza temporar un obiect SpriteSheet initializat prin intermediul clasei ImageLoader
         SpriteSheet sheet = new SpriteSheet(ImageLoader.LoadImage("/textures/PaooGameSpriteSheet.png"));
-
+        SpriteSheet menu = new SpriteSheet(ImageLoader.LoadImage("/textures/menubackground.png"));
             /// Se obtin subimaginile corespunzatoare elementelor necesare.
         grass = sheet.crop(0, 0);
         soil = sheet.crop(1, 0);
-        townGrass = sheet.crop(2, 0);
         mountain = sheet.crop(3, 0);
         water = sheet.crop(4, 0);
         tree = sheet.crop(5,0);
+        seed = sheet.crop (0,1);
         heroLeft = sheet.crop(0, 2);
         heroLeft1 = sheet.crop(0, 3);
         heroLeft2 = sheet.crop(0, 4);
@@ -67,5 +69,7 @@ public class Assets
         heroUp1 = sheet.crop(3, 3);
         heroUp2 = sheet.crop(3, 4);
         heroUp3 = sheet.crop(3, 5);
+        finish = sheet.crop(1,1);
+        menuBackground = menu.crop(0,2,791,573);
     }
 }

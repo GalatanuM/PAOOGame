@@ -1,11 +1,12 @@
 package PaooGame;
 
+import PaooGame.Database.Database;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
 import PaooGame.Input.KeyManager;
+import PaooGame.Maps.*;
 import PaooGame.States.*;
 import PaooGame.Tiles.Tile;
-
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
@@ -63,14 +64,24 @@ public class Game implements Runnable
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
 
         ///Available states
-    private State playState;            /*!< Referinta catre joc.*/
+    private State playState1;            /*!< Referinta catre joc1.*/
+    private State playState2;            /*!< Referinta catre joc2.*/
+    private State playState3;            /*!< Referinta catre joc3.*/
+    private State playState4;            /*!< Referinta catre joc4.*/
     private State menuState;            /*!< Referinta catre menu.*/
+    private State saveState;            /*!< Referinta catre meniul de salvare.*/
+    private State startState;            /*!< Referinta catre meniul de start.*/
     private State settingsState;        /*!< Referinta catre setari.*/
     private State aboutState;           /*!< Referinta catre about.*/
+    private State highscoreState;           /*!< Referinta catre about.*/
     private KeyManager keyManager;      /*!< Referinta catre obiectul care gestioneaza intrarile din partea utilizatorului.*/
+
+    private Map map;
     private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibile.*/
 
-    private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
+    public static int levelsFinished=0;
+
+    Database dataBase; /*!< Referinta catre baza de date.*/
 
     /*! \fn public Game(String title, int width, int height)
         \brief Constructor de initializare al clasei Game.
@@ -112,12 +123,16 @@ public class Game implements Runnable
             ///Se construieste obiectul de tip shortcut ce va retine o serie de referinte catre elementele importante din program.
         refLink = new RefLinks(this);
             ///Definirea starilor programului
-        playState       = new PlayState(refLink);
-        menuState       = new MenuState(refLink);
-        settingsState   = new SettingsState(refLink);
-        aboutState      = new AboutState(refLink);
+        menuState       = MenuState.getInstance(refLink);
+        settingsState   = SettingsState.getInstance(refLink);
+        startState   = StartState.getInstance(refLink);
+        aboutState      = AboutState.getInstance(refLink);
+        saveState       = SaveState.getInstance(refLink);
+        dataBase        = Database.getInstance(refLink);
+        highscoreState = HighscoreState.getInstance(refLink);
+        map             = new Map(refLink);
             ///Seteaza starea implicita cu care va fi lansat programul in executie
-        State.SetState(playState);
+        State.SetState(startState);
     }
 
     /*! \fn public void run()
@@ -213,21 +228,258 @@ public class Game implements Runnable
 
     /*! \fn private void Update()
         \brief Actualizeaza starea elementelor din joc.
-
         Metoda este declarata privat deoarece trebuie apelata doar in metoda run()
      */
-    private void Update()
-    {
-            ///Determina starea tastelor
+    private void Update() {
+        ///Determina starea tastelor
         keyManager.Update();
         ///Trebuie obtinuta starea curenta pentru care urmeaza a se actualiza starea, atentie trebuie sa fie diferita de null.
-        if(State.GetState() != null)
+        if (State.GetState() != null)
         {
-                ///Actualizez starea curenta a jocului daca exista.
+            if(State.GetState()==playState1 || State.GetState()==playState2 || State.GetState()==playState3 || State.GetState()==playState4)
+            {
+                State.incScor();
+                if(!State.checkScore())State.SetState(startState);
+            }
+            ///Actualizez starea curenta a jocului daca exista.
             State.GetState().Update();
+            if (refLink.GetKeyManager().esc && !refLink.GetKeyManager().escPressed)
+            {
+                System.out.println("Escape apasat");
+                refLink.GetKeyManager().escPressed = true;
+                if (State.GetState() == playState1 || State.GetState() == playState2 || State.GetState() == playState3 || State.GetState()==playState4)
+                {
+                    State.SetState(menuState);
+                }
+                else
+                if(State.GetState()==menuState || State.GetState()==highscoreState || State.GetState()==aboutState || State.GetState()==settingsState)
+                {
+                    State.SetState(State.getPreviousState());
+                }
+            }
+            else if (!refLink.GetKeyManager().esc)
+            {
+                refLink.GetKeyManager().escPressed = false;
+            }
+            if (refLink.GetKeyManager().enter && !refLink.GetKeyManager().enterPressed)
+            {
+                System.out.println("enter apasat");
+                refLink.GetKeyManager().enterPressed=true;
+                if(State.GetState()==startState)
+                {
+                    if (StartState.getCurrentOption() == 0) {
+                        //start
+                            State.resetScore();
+                            State.resetLastScore();
+                            Map.level=0;
+                            levelsFinished=0;
+                            playState1=null;
+                            playState1=new PlayState1(refLink);
+                            playState2=null;
+                            //playState2=new PlayState2(refLink);
+                            playState3=null;
+                            //playState3=new PlayState3(refLink);
+                            playState4=null;
+                            //playState4=new PlayState4(refLink);
+                            State.SetState(playState1);
+                    }
+                    if (StartState.getCurrentOption() == 1) {
+                        //highscores
+                        State.SetState(highscoreState);
+                    }
+                    if (StartState.getCurrentOption() == 2) {
+                        //load save
+                        Database.DatabaseLoadGame();
+                        if(Database.isLoaded())
+                        {
+                            if(levelsFinished==0)
+                            {
+                                playState1=new PlayState1(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState1);
+                            }
+                            if(levelsFinished==1)
+                            {
+                                playState2=new PlayState2(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState2);
+                            }
+                            if(levelsFinished==2)
+                            {
+                                playState3=new PlayState3(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState3);
+                            }
+                            if(levelsFinished==3)
+                            {
+                                playState4=new PlayState4(refLink,"./src/PaooGame/Database/map.txt");
+                                State.SetState(playState4);
+                            }
+                        }
+                        else
+                        {
+                            playState1=null;
+                            playState1=new PlayState1(refLink);
+                            State.resetScore();
+                            Map.level=1;
+                            State.SetState(playState1);
+                        }
+                    }
+                    if (StartState.getCurrentOption() == 3) {
+                        //settings
+                        State.SetState(settingsState);
+                    }
+                    if (StartState.getCurrentOption() == 4) {
+                        //about
+                        State.SetState(aboutState);
+                    }
+                    if (StartState.getCurrentOption() == 5) {
+                        wnd.GetWndFrame().dispose();
+                        System.exit(0);
+                    }
+                    StartState.resetCurrentOption();
+                }
+                else
+                if(State.GetState()==saveState)
+                {
+                    if(SaveState.getCurrentOption()==0)
+                    {
+                        //save score
+                        Database.databaseSaveHighscore();
+                        Database.loadHighscores();
+                        playState1=null;
+                        playState2=null;
+                        playState3=null;
+                        playState4=null;
+                        State.resetScore();
+                        refLink.GetKeyManager().enterPressed=true;
+                        State.SetState(startState);
+                    }
+                    if (SaveState.getCurrentOption() == 1) {
+                        //exit without save
+                        playState1=null;
+                        playState2=null;
+                        playState3=null;
+                        playState4=null;
+                        State.resetScore();
+                        refLink.GetKeyManager().enterPressed=true;
+                        State.SetState(startState);
+                    }
+                    SaveState.resetCurrentOption();
+                }
+                else
+                if (State.GetState()==menuState)
+                {
+                    if (MenuState.getCurrentOption() == 0) {
+                        //resume
+                        State.SetState(State.getPreviousState());
+                    }
+                    if (MenuState.getCurrentOption() == 1) {
+                        //restart
+                        switch (levelsFinished)
+                        {
+                            case 0:
+                            case 4:
+                                State.setScor(State.getLastscor());
+                                playState1=null;
+                                playState1=new PlayState1(refLink);
+                                State.SetState(playState1);
+                                break;
+                            case 1:
+                                State.setScor(State.getLastscor());
+                                playState2=null;
+                                playState2=new PlayState2(refLink);
+                                State.SetState(playState2);
+                                break;
+                            case 2:
+                                State.setScor(State.getLastscor());
+                                playState3=null;
+                                playState3=new PlayState3(refLink);
+                                State.SetState(playState3);
+                                break;
+                            case 3:
+                                State.setScor(State.getLastscor());
+                                playState4=null;
+                                playState4=new PlayState4(refLink);
+                                State.SetState(playState4);
+                                break;
+                        }
+                    }
+                    if (MenuState.getCurrentOption() == 2) {
+
+                        //save game
+                        Database.databaseNewGame();
+                        Database.DatabaseSaveGame();
+                        playState1=null;
+                        playState2=null;
+                        playState3=null;
+                        playState4=null;
+                        State.resetScore();
+                        Map.level=0;
+                        State.SetState(startState);
+                    }
+                    if (MenuState.getCurrentOption() == 3) {
+                        //exit to main menu
+                        State.SetState(startState);
+                    }
+                    MenuState.resetCurrentOption();
+                }
+                else
+                if(State.GetState()==settingsState)
+                {
+                    if(SettingsState.getCurrentOption()==0)
+                    {
+                        State.SetState(startState);
+                    }
+                    if(SettingsState.getCurrentOption()==1)
+                    {
+                        SettingsState.setDificulty(0);
+                        State.SetState(startState);
+                    }
+                    if(SettingsState.getCurrentOption()==2)
+                    {
+                        SettingsState.setDificulty(1);
+                        State.SetState(startState);
+                    }
+                    if(SettingsState.getCurrentOption()==3)
+                    {
+                        SettingsState.setDificulty(2);
+                        State.SetState(startState);
+                    }
+                    SettingsState.resetCurrentOption();
+                }
+            }
+            else if (!refLink.GetKeyManager().enter)
+            {
+                refLink.GetKeyManager().enterPressed = false;
+            }
+            if(State.GetState() == playState1 && Map1.isOver())
+            {
+                playState2=null;
+                playState2=new PlayState2(refLink);
+                levelsFinished=1;
+                State.SetState(playState2);
+                State.setLastscor(State.getScor());
+            }
+            if(State.GetState()==playState2 && Map2.isOver())
+            {
+                playState3=null;
+                playState3=new PlayState3(refLink);
+                levelsFinished=2;
+                State.SetState(playState3);
+                State.setLastscor(State.getScor());
+            }
+            if(State.GetState()==playState3 && Map3.isOver())
+            {
+                playState4=null;
+                playState4=new PlayState4(refLink);
+                levelsFinished=3;
+                State.SetState(playState4);
+                State.setLastscor(State.getScor());
+            }
+            if(State.GetState()==playState4 && Map4.isOver())
+            {
+                State.SetState(saveState);
+            }
         }
     }
-
     /*! \fn private void Draw()
         \brief Deseneaza elementele grafice in fereastra coresponzator starilor actualizate ale elementelor.
 
@@ -297,6 +549,10 @@ public class Game implements Runnable
     public KeyManager GetKeyManager()
     {
         return keyManager;
+    }
+
+    public void setLevelFinished(int levels) {
+        this.levelsFinished=levels;
     }
 }
 

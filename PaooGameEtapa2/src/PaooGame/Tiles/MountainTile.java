@@ -16,14 +16,7 @@ public class MountainTile extends Tile {
     {
             /// Apel al constructorului clasei de baza
         super(Assets.mountain, id);
+        solid=true;
     }
 
-    /*! \fn public boolean IsSolid()
-        \brief Suprascrie metoda IsSolid() din clasa de baza in sensul ca va fi luat in calcul in caz de coliziune.
-     */
-    @Override
-    public boolean IsSolid()
-    {
-        return true;
-    }
 }

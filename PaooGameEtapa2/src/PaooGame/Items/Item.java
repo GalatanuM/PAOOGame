@@ -48,6 +48,7 @@ public abstract class Item
 
         ///Metoda abstracta destinata actualizarii starii curente
     public abstract void Update();
+
         ///Metoda abstracta destinata desenarii starii curente
     public abstract void Draw(Graphics g);
 
@@ -99,35 +100,23 @@ public abstract class Item
         this.y = y;
     }
 
-    /*! \fn public float SetWidth()
-        \brief Seteaza latimea imaginii entitatii.
-     */
-    public void SetWidth(int width)
+    public float getBoundX()
     {
-        this.width = width;
+        return this.normalBounds.x;
     }
 
-    /*! \fn public float SetHeight()
-        \brief Seteaza inaltimea imaginii entitatii.
-     */
-    public void SetHeight(int height)
+    public float getBoundY()
     {
-        this.height = height;
+        return this.normalBounds.y;
     }
 
-    /*! \fn public void SetNormalMode()
-        \brief Seteaza modul normal de interactiune
-     */
-    public void SetNormalMode()
+    public float getBoundWidth()
     {
-        bounds = normalBounds;
+        return this.bounds.width;
     }
 
-    /*! \fn public void SetAttackMode()
-        \brief Seteaza modul de atac de interactiune
-     */
-    public void SetAttackMode()
+    public float getBoundHeight()
     {
-        bounds = attackBounds;
+        return this.bounds.height;
     }
 }

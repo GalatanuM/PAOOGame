@@ -1,12 +1,10 @@
 package PaooGame;
 
-import PaooGame.GameWindow.GameWindow;
-
 public class Main
 {
     public static void main(String[] args)
     {
-        Game paooGame = new Game("Aranara Flower Garden", 960, 480);
+        Game paooGame = new Game("Aranara Flower Garden", 1280, 920);
         paooGame.StartGame();
     }
 }
